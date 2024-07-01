@@ -9,7 +9,7 @@ export default function TitleForm(props){
               onSubmit={(e) => {
                 e.preventDefault();
                 if (titleText.length) {
-                  props.setTitleField((prev) => [
+                  props.setTitleBlocks((prev) => [
                     {
                       type: "title",
                       title: "Nadpis: " + titleText,

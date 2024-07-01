@@ -1,23 +1,23 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Sidebar from "../Sidebar/Sidebar";
 import "./MainDroppable.css";
-import Column from "./Column"
+import Column from "./Column";
 import SettingsBox from "./SettingsBox";
 import { useState } from "react";
 
 function Row(props) {
-  const [stencil,setStencil] = useState("50|50")
-  return(
-    <>                        
-    {props.row.length === 2 && !props.edit && (
-      <SettingsBox
-        theme={props.theme}
-        themeStyles={props.themeStyles}
-        setStencil = {setStencil}
-        stencil={stencil}
-        rowIndex={props.rowIndex}
-      />
-    )}
+  const [stencil, setStencil] = useState("50|50");
+  return (
+    <>
+      {props.row.length === 2 && !props.edit && (
+        <SettingsBox
+          theme={props.theme}
+          themeStyles={props.themeStyles}
+          setStencil={setStencil}
+          stencil={stencil}
+          rowIndex={props.rowIndex}
+        />
+      )}
       <Column
         row={props.row}
         rowIndex={props.rowIndex}
@@ -27,8 +27,8 @@ function Row(props) {
         deleteField={props.deleteField}
         stencil={stencil}
       />
-      </>
-  )
+    </>
+  );
 }
 
 export default function MainDroppable(props) {
@@ -56,7 +56,7 @@ export default function MainDroppable(props) {
             >
               <button
                 onClick={() => {
-                  props.setRightFieldGroups((prev) => {
+                  props.setBuildArea((prev) => {
                     return [...prev, [[{ type: "line" }]]];
                   });
                 }}
@@ -65,7 +65,7 @@ export default function MainDroppable(props) {
               </button>
             </Sidebar>
 
-            {props.rightFieldGroups.map((row, rowIndex) => (
+            {props.buildArea.map((row, rowIndex) => (
               <Draggable
                 key={`row-${rowIndex}-grab`}
                 draggableId={`row-${rowIndex}-grab`}
@@ -88,7 +88,7 @@ export default function MainDroppable(props) {
                           }}
                           onClick={() => {
                             if (props.edit)
-                              props.setRightFieldGroups((prev) =>
+                              props.setBuildArea((prev) =>
                                 prev.filter((row, rowID) => rowID !== rowIndex)
                               );
                           }}
@@ -103,17 +103,17 @@ export default function MainDroppable(props) {
                         {...providedField.dragHandleProps}
                         style={{
                           ...providedField.draggableProps.style,
-                          padding: !props.edit ? "40px" : "20px"
+                          padding: !props.edit ? "40px" : "20px",
                         }}
                         className="row"
                       >
                         <Row
-                        row={row}
-                        rowIndex={rowIndex}
-                        themeStyles={props.themeStyles}
-                        edit={props.edit}
-                        theme={props.theme}
-                        deleteField={props.deleteField}
+                          row={row}
+                          rowIndex={rowIndex}
+                          themeStyles={props.themeStyles}
+                          edit={props.edit}
+                          theme={props.theme}
+                          deleteField={props.deleteField}
                         />
                       </div>
                     );
@@ -166,7 +166,7 @@ export default function MainDroppable(props) {
                               {...provided.droppableProps}
                               style={styles}
                             >
-                              {props.rightFieldGroups.length === 0 ? (
+                              {props.buildArea.length === 0 ? (
                                 <div className="text">
                                   <h2
                                     style={{

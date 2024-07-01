@@ -11,262 +11,162 @@ import TitlePanel from "./components/TitlePanel/TitlePanel";
 import MainDroppable from "./components/MainDroppable/MainDroppable";
 import EditButtons from "./components/EditButtons/EditButtons";
 import { ThemeButtons } from "./assets/themes";
-function App() {
-  const initialFields = schema;
+import {
+  shouldCreateColumn,
+  getColumnId,
+  getRowId,
+  isColumn,
+  isField,
+  isRow,
+  movedToBuildArea,
+  updateList,
+  createColumn,
+  addToColumn,
+  isUIblockList,
+  isTitleList,
+  moveToList,
+  shouldCreateRowWithColumn,
+  returnUiBlock,
+} from "./utils/utils";
 
-  const [leftFields, setLeftFields] = useState(initialFields);
-  const [titleField, setTitleField] = useState([]);
+function App() {
+  const [uiBlocks, setUiBlocks] = useState(schema);
+  const [titleBlocks, setTitleBlocks] = useState([]);
   const [marks, setMarks] = useState([[]]);
   const [markNames, setMarkNames] = useState(["Formulár"]);
   const [activeMark, setActiveMark] = useState(0);
-  const [rightFieldGroups, setRightFieldGroups] = useState(marks[activeMark]);
+  const [buildArea, setBuildArea] = useState(marks[activeMark]);
   const [edit, setEdit] = useState(true);
   const [dragEnd, setDragEnd] = useState(false);
 
-
   // Delete empty drop areas, after drag ended
   useEffect(() => {
-    setRightFieldGroups((prev) => {
+    setBuildArea((prev) => {
       return prev.map((row) => {
         return row.filter((col) => col.length !== 0);
       });
     });
-    setRightFieldGroups((prev) => {
+    setBuildArea((prev) => {
       return prev.filter((row) => row.length !== 0);
     });
   }, [dragEnd]);
 
-  
   const onDragEnd = (result) => {
     setDragEnd((prev) => !prev);
     if (!result.destination) return;
-
     const sourceList = result.source.droppableId;
     const destinationList = result.destination.droppableId;
-
-    if (sourceList === "left-list" && destinationList === "addRow") {
-      const [movedField] = leftFields.splice(result.source.index, 1);
-      setRightFieldGroups((prev) => [...prev, [[movedField]]]);
-      return;
-    } else if (sourceList === "title-list" && destinationList === "addRow") {
-      const [movedField] = titleField.splice(result.source.index, 1);
-      setRightFieldGroups((prev) => [...prev, [[movedField]]]);
-      return;
-    } else if (
-      sourceList.split("-")[0] === "column" &&
-      destinationList === "addRow"
-    ) {
-      let rowNumber = sourceList.split("-")[1];
-      let columnNumber = sourceList.split("-")[2];
-
-      const sourceFields = rightFieldGroups[rowNumber][columnNumber];
-      const [movedField] = sourceFields.splice(result.source.index, 1);
-
-      setRightFieldGroups((prev) => [...prev, [[movedField]]]);
-
-      return;
+    // Make new row from UI block
+    if (sourceList === "uiBlocks-list" && destinationList === "addRow") {
+      const [movedField] = uiBlocks.splice(result.source.index, 1);
+      return setBuildArea((prev) => [...prev, [[movedField]]]);
     }
-
-    if (sourceList === "title-list" && destinationList === "left-list") return;
-    if (sourceList === "left-list" && destinationList === "title-list") return;
-
+    // Cant move ui block to title list
+    if (sourceList === "uiBlocks-list" && destinationList === "title-list")
+      return;
+    // Make new row from title
+    if (sourceList === "title-list" && destinationList === "addRow") {
+      const [movedField] = titleBlocks.splice(result.source.index, 1);
+      return setBuildArea((prev) => [...prev, [[movedField]]]);
+    }
+    // Cant move title to UIblock list
+    if (sourceList === "title-list" && destinationList === "uiBlocks-list")
+      return;
     if (sourceList === destinationList) {
-      if (sourceList.split("-")[0] === "column") {
-        let rowNumber = sourceList.split("-")[1];
-        let columnNumber = sourceList.split("-")[2];
-        const sourceFields = rightFieldGroups[rowNumber][columnNumber];
-        const [movedField] = sourceFields.splice(result.source.index, 1);
-        sourceFields.splice(result.destination.index, 0, movedField);
-        setRightFieldGroups((prev) => {
-          return prev.map((row, rowIndex) => {
-            if (rowIndex === rowNumber) {
-              return row.map((column, columnIndex) => {
-                if (columnIndex === columnNumber) return sourceFields;
-                else return column;
-              });
-            } else {
-              return row;
-            }
-          });
-        });
-      } else if (sourceList === "left-list") {
-        const sourceFields = leftFields;
-        const [movedField] = sourceFields.splice(result.source.index, 1);
-        sourceFields.splice(result.destination.index, 0, movedField);
-        setLeftFields([...sourceFields]);
-      } else if (sourceList === "title-list") {
-        const sourceFields = titleField;
-        const [movedField] = sourceFields.splice(result.source.index, 1);
-        sourceFields.splice(result.destination.index, 0, movedField);
-        setTitleField([...sourceFields]);
-      } else if (sourceList.split("-")[0] === "group") {
-        let rowNumber = sourceList.split("-")[1];
-        const sourceFields = rightFieldGroups[rowNumber];
-        const [movedField] = sourceFields.splice(result.source.index, 1);
-        sourceFields.splice(result.destination.index, 0, movedField);
-      } else if (sourceList === "base") {
-        const sourceFields = rightFieldGroups;
-        const [movedField] = sourceFields.splice(result.source.index, 1);
-        sourceFields.splice(result.destination.index, 0, movedField);
+      // Move within UI blocks
+      if (sourceList === "uiBlocks-list") {
+        return updateList(uiBlocks, result);
       }
-    } else if (
-      destinationList !== "left-list" &&
-      destinationList !== "title-list"
-    ) {
-      // Presun z ľavého zoznamu do pravého
-      if (sourceList === "left-list") {
-        const [movedField] = leftFields.splice(result.source.index, 1);
-        if (destinationList.split("-")[0] === "addColumn") {
-          let rowNumber = parseInt(destinationList.split("-")[1]);
-          //pridá array do arraya podľa groupnumber v rightFieldGroups
-          setRightFieldGroups((prev) => {
-            return prev.map((row, i) => {
-              if (i === rowNumber) return [...row, [movedField]];
-              else return row;
-            });
-          });
-        } else if (destinationList.split("-")[0] === "column") {
-          const rowNumber = parseInt(destinationList.split("-")[1]);
-          const columnNumber = parseInt(destinationList.split("-")[2]);
-          let destinationIndex = parseInt(result.destination.index);
-
-          setRightFieldGroups((prev) => {
-            return prev.map((row, rowIndex) => {
-              if (rowIndex === rowNumber) {
-                return row.map((column, columnIndex) => {
-                  if (columnIndex === columnNumber) {
-                    let updatedColumn = [...column];
-                    updatedColumn.splice(destinationIndex, 0, movedField);
-                    return updatedColumn;
-                  } else return column;
-                });
-              } else {
-                return row;
-              }
-            });
-          });
-        }
-      } else if (sourceList === "title-list") {
-        const [movedField] = titleField.splice(result.source.index, 1);
-        if (destinationList.split("-")[0] === "addColumn") {
-          let rowNumber = parseInt(destinationList.split("-")[1]);
-          //pridá array do arraya podľa groupnumber v rightFieldGroups
-          setRightFieldGroups((prev) => {
-            return prev.map((row, i) => {
-              if (i === rowNumber) return [...row, [movedField]];
-              else return row;
-            });
-          });
-        } else if (destinationList.split("-")[0] === "column") {
-          const rowNumber = parseInt(destinationList.split("-")[1]);
-          const columnNumber = parseInt(destinationList.split("-")[2]);
-          let destinationIndex = parseInt(result.destination.index);
-
-          setRightFieldGroups((prev) => {
-            return prev.map((row, rowIndex) => {
-              if (rowIndex === rowNumber) {
-                return row.map((column, columnIndex) => {
-                  if (columnIndex === columnNumber) {
-                    let updatedColumn = [...column];
-                    updatedColumn.splice(destinationIndex, 0, movedField);
-                    return updatedColumn;
-                  } else return column;
-                });
-              } else {
-                return row;
-              }
-            });
-          });
-        }
-      } else {
-        if (
-          sourceList.split("-")[0] === "group" &&
-          destinationList.split("-")[0] === "group"
-        ) {
-          let sourceRowNumber = parseInt(sourceList.split("-")[1]);
-          let destinationRowNumber = parseInt(destinationList.split("-")[1]);
-
-          const sourceFields = rightFieldGroups[sourceRowNumber];
-          const [movedField] = sourceFields.splice(result.source.index, 1);
-          rightFieldGroups[destinationRowNumber].splice(
-            result.destination.index,
-            0,
-            movedField
-          );
-        } else if (destinationList === "addRowWithColumn") {
-          let sourceRowNumber = parseInt(sourceList.split("-")[1]);
-          const sourceFields = rightFieldGroups[sourceRowNumber];
-          const [movedField] = sourceFields.splice(result.source.index, 1);
-          setRightFieldGroups((prev) => [...prev, [movedField]]);
-          return;
-        } else {
-          let sourceRowNumber = parseInt(sourceList.split("-")[1]);
-          let sourceColumnNumber = parseInt(sourceList.split("-")[2]);
-          const sourceFields =
-            rightFieldGroups[sourceRowNumber][sourceColumnNumber];
-          const [movedField] = sourceFields.splice(result.source.index, 1);
-          if (destinationList.split("-")[0] === "addColumn") {
-            let destinationRowNumber = parseInt(destinationList.split("-")[1]);
-            setRightFieldGroups((prev) => {
-              return prev.map((row, i) => {
-                if (i === destinationRowNumber) return [...row, [movedField]];
-                else return row;
-              });
-            });
-          } else if (destinationList.split("-")[0] === "column") {
-            let destinationRowNumber = parseInt(destinationList.split("-")[1]);
-            let destinationColNumber = parseInt(destinationList.split("-")[2]);
-            let destinationIndex = parseInt(result.destination.index);
-            setRightFieldGroups((prev) => {
-              return prev.map((row, rowIndex) => {
-                if (rowIndex === destinationRowNumber) {
-                  return row.map((column, columnIndex) => {
-                    if (columnIndex === destinationColNumber) {
-                      let updatedColumn = [...column];
-                      updatedColumn.splice(destinationIndex, 0, movedField);
-                      return updatedColumn;
-                    } else return column;
-                  });
-                } else {
-                  return row;
-                }
-              });
-            });
-          }
-        }
+      // Move within title list
+      if (sourceList === "title-list") {
+        return updateList(titleBlocks, result);
       }
-    } else if (sourceList !== "left-list" && destinationList === "left-list") {
-      let rowNumber = sourceList.split("-")[1];
-      let columnNumber = sourceList.split("-")[2];
-      const sourceFields = rightFieldGroups[rowNumber][columnNumber];
-      if (sourceFields[result.source.index].type === "title") return;
-      const [movedField] = sourceFields.splice(result.source.index, 1);
-      leftFields.splice(result.destination.index, 0, movedField);
-    } else if (
-      sourceList !== "title-list" &&
-      destinationList === "title-list"
-    ) {
-      let rowNumber = sourceList.split("-")[1];
-      let columnNumber = sourceList.split("-")[2];
-      const sourceFields = rightFieldGroups[rowNumber][columnNumber];
-      if (sourceFields[result.source.index].type !== "title") return;
-      const [movedField] = sourceFields.splice(result.source.index, 1);
-      titleField.splice(result.destination.index, 0, movedField);
+      // Move of field within same column
+      if (isField(sourceList)) {
+        const rowId = getRowId(sourceList);
+        const columnId = getColumnId(sourceList);
+        const column = buildArea[rowId][columnId];
+        return updateList(column, result);
+      }
+      // Move of column within same row
+      if (isColumn(sourceList)) {
+        const rowId = getRowId(sourceList);
+        const row = buildArea[rowId];
+        return updateList(row, result);
+      }
+      // Move of row within build area
+      if (isRow(sourceList)) {
+        return updateList(buildArea, result);
+      }
+    }
+    if (movedToBuildArea(destinationList)) {
+      // Moved from UI block list or title list
+      if (isUIblockList(sourceList) || isTitleList(sourceList)) {
+        const blocks = isUIblockList(sourceList) ? uiBlocks : titleBlocks;
+        const [movedField] = blocks.splice(result.source.index, 1);
+        if (shouldCreateColumn(destinationList)) {
+          return createColumn(movedField, setBuildArea, destinationList);
+        }
+        return addToColumn(movedField, setBuildArea, destinationList, result);
+      }
+      // Moving column within build area
+      if (isColumn(sourceList) && isColumn(destinationList)) {
+        const sourceRowId = getRowId(sourceList);
+        const destinationRowId = getRowId(destinationList);
+        const sourceRow = buildArea[sourceRowId];
+        return moveToList(sourceRow, buildArea[destinationRowId], result);
+      }
+      // Create a new row from moving column from another row
+      if (isColumn(sourceList) && shouldCreateRowWithColumn(destinationList)) {
+        const sourceRowId = getRowId(sourceList);
+        const sourceRow = buildArea[sourceRowId];
+        const [deletedColumn] = sourceRow.splice(result.source.index, 1);
+        return setBuildArea((prev) => [...prev, [deletedColumn]]);
+      }
+      // Making new row from field in buildArea
+      if (isField(sourceList) && destinationList === "addRow") {
+        const rowId = getRowId(sourceList);
+        const columnId = getColumnId(sourceList);
+        const column = buildArea[rowId][columnId];
+        const [movedField] = column.splice(result.source.index, 1);
+        return setBuildArea((prev) => [...prev, [[movedField]]]);
+      }
+      // Moving field inside of build area
+      if (isField(sourceList)) {
+        const sourceRowId = getRowId(sourceList);
+        const sourceColumnId = getColumnId(sourceList);
+        const column = buildArea[sourceRowId][sourceColumnId];
+        const [deletedField] = column.splice(result.source.index, 1);
+        // Create new column from field inside build area
+        if (shouldCreateColumn(destinationList)) {
+          return createColumn(deletedField, setBuildArea, destinationList);
+        }
+        // Move field to a column inside build area
+        return addToColumn(deletedField, setBuildArea, destinationList, result);
+      }
+    }
+    // Return block back to default lists
+    // From build area to UIblocks list
+    if (sourceList !== "uiBlocks-list" && destinationList === "uiBlocks-list") {
+      return returnUiBlock(sourceList, buildArea, uiBlocks, result);
+    }
+    // From build area to title list
+    if (sourceList !== "title-list" && destinationList === "title-list") {
+      return returnUiBlock(sourceList, buildArea, titleBlocks, result);
     }
   };
 
   const deleteField = (rowIndex, columnIndex, fieldIndex, fieldType) => {
-    const movedField = rightFieldGroups[rowIndex][columnIndex][fieldIndex];
-    setRightFieldGroups((prev) => {
+    const movedField = buildArea[rowIndex][columnIndex][fieldIndex];
+    setBuildArea((prev) => {
       prev[rowIndex][columnIndex] = prev[rowIndex][columnIndex].filter(
         (_, fieldID) => fieldID !== fieldIndex
       );
       prev[rowIndex] = prev[rowIndex].filter((arr) => arr.length !== 0);
       return prev;
     });
-
-    if (fieldType === "title") setTitleField((prev) => [movedField, ...prev]);
-    else setLeftFields((prev) => [movedField, ...prev]);
+    if (fieldType === "title") setTitleBlocks((prev) => [movedField, ...prev]);
+    else setUiBlocks((prev) => [movedField, ...prev]);
   };
 
   const [theme, setTheme] = useState("");
@@ -281,18 +181,17 @@ function App() {
     localStorage.setItem("theme", theme);
     setThemeStyles(getThemeStyles(theme));
   }, [theme]);
-  
+
   function setThemeVariables(themeStyles) {
     const root = document.querySelector(":root");
     for (const [property, value] of Object.entries(themeStyles)) {
       root.style.setProperty(`--${property}`, value);
     }
   }
-  
+
   useEffect(() => {
     setThemeVariables(themeStyles);
   }, [themeStyles]);
-  
 
   const generate = () => {
     let fieldData = marks.map((mark) =>
@@ -303,29 +202,29 @@ function App() {
               let TitleText = col.title.split(" ");
               TitleText.shift();
               let text = TitleText.join(" ");
-              if(col.className === null)
-              return {
-                title: text,
-              }
+              if (col.className === null)
+                return {
+                  title: text,
+                };
               else
-              return {
-                title: text,
-                className: col.className
-              }
+                return {
+                  title: text,
+                  className: col.className,
+                };
             } else if (col.type === "line")
               return {
                 customComponent: "Line",
               };
-            else{
-              if(col.className === null)
-              return {
-                field: col.field,
-              }
+            else {
+              if (col.className === null)
+                return {
+                  field: col.field,
+                };
               else
-              return {
-                field: col.field,
-                className: col.className
-              }
+                return {
+                  field: col.field,
+                  className: col.className,
+                };
             }
           })
         )
@@ -355,9 +254,9 @@ function App() {
 
   useEffect(() => {
     const updatedMarks = [...marks];
-    updatedMarks[activeMark] = rightFieldGroups;
+    updatedMarks[activeMark] = buildArea;
     setMarks(updatedMarks);
-  }, [rightFieldGroups]);
+  }, [buildArea]);
 
   const deleteMark = (index) => {
     if (marks[index] && marks[index][0]) {
@@ -365,9 +264,9 @@ function App() {
         row.forEach((col) => {
           col.forEach((field) => {
             if (field.type && field.type === "title")
-              setTitleField((prev) => [field, ...prev]);
+              setTitleBlocks((prev) => [field, ...prev]);
             else if (field.type && field.type === "line") return;
-            else setLeftFields((prev) => [field, ...prev]);
+            else setUiBlocks((prev) => [field, ...prev]);
           });
         });
       });
@@ -377,9 +276,9 @@ function App() {
     setMarks((prev) => {
       if (index === activeMark) {
         setActiveMark(0);
-        setRightFieldGroups(marks[0]);
+        setBuildArea(marks[0]);
       } else if (index < activeMark) {
-        setRightFieldGroups(marks[activeMark]);
+        setBuildArea(marks[activeMark]);
         setActiveMark((prev) => prev - 1);
       }
       return prev.filter((mark, markID) => markID !== index);
@@ -388,7 +287,7 @@ function App() {
 
   const changeMark = (index) => {
     setActiveMark(index);
-    setRightFieldGroups(marks[index]);
+    setBuildArea(marks[index]);
   };
 
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -440,7 +339,7 @@ function App() {
             nextBgColor={themeStyles.bgTmavsia}
             theme={theme}
           >
-            <UiBlockPanel edit={edit} leftFields={leftFields} />
+            <UiBlockPanel edit={edit} uiBlocks={uiBlocks} />
           </Sidebar>
 
           <Sidebar
@@ -450,11 +349,11 @@ function App() {
             nextBgColor={themeStyles.bgTmavsia}
             theme={theme}
           >
-            <TitleForm setTitleField={setTitleField} theme={theme} />
+            <TitleForm setTitleBlocks={setTitleBlocks} theme={theme} />
             <TitlePanel
               edit={edit}
-              titleField={titleField}
-              setTitleField={setTitleField}
+              titleBlocks={titleBlocks}
+              setTitleBlocks={setTitleBlocks}
             />
           </Sidebar>
 
@@ -470,9 +369,9 @@ function App() {
               themeStyles={themeStyles}
               edit={edit}
               theme={theme}
-              rightFieldGroups={rightFieldGroups}
+              buildArea={buildArea}
               deleteField={deleteField}
-              setRightFieldGroups={setRightFieldGroups}
+              setBuildArea={setBuildArea}
             />
           </div>
         </div>

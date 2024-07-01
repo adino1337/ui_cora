@@ -11,7 +11,7 @@ export default function TitlePanel(props){
                   style={{ marginTop: "10px" }}
                   {...provided.droppableProps}
                 >
-                  {props.titleField.map((field, index) => {
+                  {props.titleBlocks.map((field, index) => {
                     return (
                       <Draggable
                         key={field.field}
@@ -35,7 +35,7 @@ export default function TitlePanel(props){
                             {props.edit && (
                               <div
                                 className="delete"
-                                onClick={() => props.setTitleField(prev=>prev.filter((field,id)=> id!==index))}
+                                onClick={() => props.setTitleBlocks(prev=>prev.filter((field,id)=> id!==index))}
                               >
                                 X
                               </div>
