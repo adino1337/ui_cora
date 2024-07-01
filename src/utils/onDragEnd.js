@@ -14,6 +14,9 @@ import {
   moveToList,
   shouldCreateRowWithColumn,
   returnUiBlock,
+  returnTitleBlock,
+  getElement,
+  get2Delement,
 } from "./utils";
 
 const addNewRow = (result, blocks, setBuildArea) => {
@@ -60,29 +63,19 @@ const moveToBuildArea = (result, setBuildArea, uiBlocks, titleBlocks, sourceList
 }
 
 const moveColumn = (result, buildArea, sourceList, destinationList) => {
-  const sourceRowId = getRowId(sourceList);
-  const destinationRowId = getRowId(destinationList);
-  const sourceRow = buildArea[sourceRowId];
-  return moveToList(sourceRow, buildArea[destinationRowId], result);
+  const sourceRow = getElement(sourceList, buildArea);
+  const destinationRow = getElement(destinationList, buildArea);
+  return moveToList(sourceRow, destinationRow, result);
 }
 
 const addRow = (result, buildArea, setBuildArea, isColumn, sourceList) => {
-  const rowId = getRowId(sourceList);
-  let block = buildArea[rowId];
-
-  if (!isColumn) {
-    const columnId = getColumnId(sourceList);
-    block = buildArea[rowId][columnId];
-  }
-
+  const block = isColumn ? getElement(sourceList, buildArea) : get2Delement(sourceList, buildArea);
   const [deletedBlock] = block.splice(result.source.index, 1);
   return setBuildArea((prev) => [...prev, isColumn ? [deletedBlock] : [[deletedBlock]]]);
 }
 
 const moveField = (result, buildArea, setBuildArea, sourceList, destinationList) => {
-  const sourceRowId = getRowId(sourceList);
-  const sourceColumnId = getColumnId(sourceList);
-  const column = buildArea[sourceRowId][sourceColumnId];
+  const column = get2Delement(sourceList, buildArea);
   const [deletedField] = column.splice(result.source.index, 1);
   // Create new column from field inside build area
   if (shouldCreateColumn(destinationList)) {
@@ -150,6 +143,6 @@ export const onDragEnd = (result, buildArea, setBuildArea, setDragEnd, uiBlocks,
     }
     // From build area to title list
     if (sourceList !== "title-list" && destinationList === "title-list") {
-      return returnUiBlock(sourceList, buildArea, titleBlocks, result);
+      return returnTitleBlock(sourceList, buildArea, titleBlocks, result);
     }
   };
