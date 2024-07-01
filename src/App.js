@@ -39,15 +39,11 @@ function App() {
   const [edit, setEdit] = useState(true);
   const [dragEnd, setDragEnd] = useState(false);
 
-  // Delete empty drop areas, after drag ended
   useEffect(() => {
     setBuildArea((prev) => {
-      return prev.map((row) => {
-        return row.filter((col) => col.length !== 0);
-      });
-    });
-    setBuildArea((prev) => {
-      return prev.filter((row) => row.length !== 0);
+      return prev
+        .map((row) => row.filter((col) => col.length !== 0)) // Filter out empty columns
+        .filter((row) => row.length !== 0); // Filter out empty rows
     });
   }, [dragEnd]);
 
