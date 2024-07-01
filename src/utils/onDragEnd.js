@@ -70,6 +70,19 @@ const moveColumn = (result, buildArea) => {
   return moveToList(sourceRow, buildArea[destinationRowId], result);
 }
 
+const addRow = (result, buildArea, setBuildArea, isColumn) => {
+  const sourceList = result.source.droppableId;
+  const rowId = getRowId(sourceList);
+  let block = buildArea[rowId];
+
+  if (!isColumn) {
+    const columnId = getColumnId(sourceList);
+    block = buildArea[rowId][columnId];
+  }
+  const [deletedBlock] = block.splice(result.source.index, 1);
+  return setBuildArea((prev) => [...prev, isColumn ? [deletedBlock] : [[deletedBlock]]]);
+}
+
 const editBuildArea = (result, buildArea, setBuildArea, uiBlocks, titleBlocks) => {
   const sourceList = result.source.droppableId;
   const destinationList = result.destination.droppableId;
@@ -83,18 +96,12 @@ const editBuildArea = (result, buildArea, setBuildArea, uiBlocks, titleBlocks) =
   }
   // Create a new row from moving column from another row
   if (isColumn(sourceList) && shouldCreateRowWithColumn(destinationList)) {
-    const sourceRowId = getRowId(sourceList);
-    const sourceRow = buildArea[sourceRowId];
-    const [deletedColumn] = sourceRow.splice(result.source.index, 1);
-    return setBuildArea((prev) => [...prev, [deletedColumn]]);
+    console.log("create row from column");
+    addRow(result, buildArea, setBuildArea, true);
   }
   // Making new row from field in buildArea
   if (isField(sourceList) && destinationList === "addRow") {
-    const rowId = getRowId(sourceList);
-    const columnId = getColumnId(sourceList);
-    const column = buildArea[rowId][columnId];
-    const [movedField] = column.splice(result.source.index, 1);
-    return setBuildArea((prev) => [...prev, [[movedField]]]);
+    addRow(result, buildArea, setBuildArea, false);
   }
   // Moving field inside of build area
   if (isField(sourceList)) {
