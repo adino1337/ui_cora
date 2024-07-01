@@ -23,6 +23,8 @@ function App() {
   const [edit, setEdit] = useState(true);
   const [dragEnd, setDragEnd] = useState(false);
 
+
+  // Delete empty drop areas, after drag ended
   useEffect(() => {
     setRightFieldGroups((prev) => {
       return prev.map((row) => {
@@ -34,6 +36,7 @@ function App() {
     });
   }, [dragEnd]);
 
+  
   const onDragEnd = (result) => {
     setDragEnd((prev) => !prev);
     if (!result.destination) return;
