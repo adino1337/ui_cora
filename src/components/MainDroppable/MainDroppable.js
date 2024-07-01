@@ -75,7 +75,7 @@ export default function MainDroppable(props) {
               >
                 {(providedField) => {
                   console.log(row);
-                  if (row[0] && row[0][0].type === "line")
+                  if (row[0] && row[0][0] && row[0][0].type === "line")
                     return (
                       <div
                         ref={providedField.innerRef}
