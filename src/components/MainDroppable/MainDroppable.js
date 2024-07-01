@@ -74,7 +74,8 @@ export default function MainDroppable(props) {
                 isDragDisabled={!props.edit}
               >
                 {(providedField) => {
-                  if (row[0][0] && row[0][0].type === "line")
+                  console.log(row);
+                  if (row[0] && row[0][0].type === "line")
                     return (
                       <div
                         ref={providedField.innerRef}
