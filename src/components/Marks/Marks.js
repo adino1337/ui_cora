@@ -8,6 +8,7 @@ export default function Marks(props) {
       {props.marks.map((mark, i) => {
         return (
           <Mark
+            key={i}
             activeMark={props.activeMark}
             themeStyles={props.themeStyles}
             theme={props.theme}

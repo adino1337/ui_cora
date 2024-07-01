@@ -74,52 +74,48 @@ export default function MainDroppable(props) {
                 isDragDisabled={!props.edit}
               >
                 {(providedField) => {
-                  try {
-                    if (row[0][0].type && row[0][0].type === "line")
-                      return (
-                        <div
-                          ref={providedField.innerRef}
-                          {...providedField.draggableProps}
-                          {...providedField.dragHandleProps}
-                          style={{
-                            padding: "20px 0",
-                            display: "flex",
-                            ...providedField.draggableProps.style,
-                          }}
-                          onClick={() => {
-                            if (props.edit)
-                              props.setBuildArea((prev) =>
-                                prev.filter((row, rowID) => rowID !== rowIndex)
-                              );
-                          }}
-                        >
-                          <div className="line"></div>
-                        </div>
-                      );
+                  if (row[0][0] && row[0][0].type === "line")
                     return (
                       <div
                         ref={providedField.innerRef}
                         {...providedField.draggableProps}
                         {...providedField.dragHandleProps}
                         style={{
+                          padding: "20px 0",
+                          display: "flex",
                           ...providedField.draggableProps.style,
-                          padding: !props.edit ? "40px" : "20px",
                         }}
-                        className="row"
+                        onClick={() => {
+                          if (props.edit)
+                            props.setBuildArea((prev) =>
+                              prev.filter((row, rowID) => rowID !== rowIndex)
+                            );
+                        }}
                       >
-                        <Row
-                          row={row}
-                          rowIndex={rowIndex}
-                          themeStyles={props.themeStyles}
-                          edit={props.edit}
-                          theme={props.theme}
-                          deleteField={props.deleteField}
-                        />
+                        <div className="line"></div>
                       </div>
                     );
-                  } catch (e) {
-                    console.error("ERROR: " + e);
-                  }
+                  return (
+                    <div
+                      ref={providedField.innerRef}
+                      {...providedField.draggableProps}
+                      {...providedField.dragHandleProps}
+                      style={{
+                        ...providedField.draggableProps.style,
+                        padding: !props.edit ? "40px" : "20px",
+                      }}
+                      className="row"
+                    >
+                      <Row
+                        row={row}
+                        rowIndex={rowIndex}
+                        themeStyles={props.themeStyles}
+                        edit={props.edit}
+                        theme={props.theme}
+                        deleteField={props.deleteField}
+                      />
+                    </div>
+                  );
                 }}
               </Draggable>
             ))}
