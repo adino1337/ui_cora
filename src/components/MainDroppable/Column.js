@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-
-
 export default function Column(props) {
-    const [width,setWidth] = useState("auto")
+  const [width, setWidth] = useState("auto");
   return (
     <Droppable
       key={`group-${props.rowIndex}`}
@@ -28,22 +26,18 @@ export default function Column(props) {
                 index={columnIndex}
                 type="column"
                 isDragDisabled={!props.edit}
-
               >
                 {(providedField, snapshot) => {
                   let styles = {
                     ...providedField.draggableProps.style,
                   };
-                    if(props.edit)
-                      styles = {...styles, maxWidth: "200px"}
-                    else if(props.stencil==="50|50")
-                      styles = {...styles, minWidth: "0"}
-                    else if(props.stencil==="15|85" && columnIndex === 0)
-                        styles = {...styles, maxWidth: "15%"}
-                    else if(props.stencil==="85|15" && columnIndex === 1)
-                        styles = {...styles, maxWidth: "15%"}
-
-
+                  if (props.edit) styles = { ...styles, maxWidth: "200px" };
+                  else if (props.stencil === "50|50")
+                    styles = { ...styles, minWidth: "0" };
+                  else if (props.stencil === "15|85" && columnIndex === 0)
+                    styles = { ...styles, maxWidth: "15%" };
+                  else if (props.stencil === "85|15" && columnIndex === 1)
+                    styles = { ...styles, maxWidth: "15%" };
 
                   return (
                     <div
@@ -74,14 +68,19 @@ export default function Column(props) {
                               style={styles}
                             >
                               {column.map((field, fieldIndex) => {
-                                if(props.row.length===2)
-                                {
-                                  if(props.stencil === "15|85")
-                                    field.className = columnIndex === 0 ? "detail-small" : "detail-large"
+                                if (props.row.length === 2) {
+                                  if (props.stencil === "15|85")
+                                    field.className =
+                                      columnIndex === 0
+                                        ? "detail-small"
+                                        : "detail-large";
                                   else if (props.stencil === "85|15")
-                                    field.className = columnIndex === 0 ? "detail-large" : "detail-small"
-                                  else if(props.stencil === "50|50")
-                                    field.className = null
+                                    field.className =
+                                      columnIndex === 0
+                                        ? "detail-large"
+                                        : "detail-small";
+                                  else if (props.stencil === "50|50")
+                                    field.className = null;
                                 }
                                 let styles =
                                   field.type === "title"

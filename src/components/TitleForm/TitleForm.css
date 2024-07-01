@@ -1,46 +1,47 @@
+.titleInputBox {
+  margin: 70px 0 25px 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  gap: 10px;
+  position: relative;
+}
+.titleInputBox::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(50%);
+  height: 3px;
+  background-color: var(--field);
+}
+.titleInputBox input {
+  border: none;
+  outline: none;
+  padding: 10px;
+  min-height: 20px;
+  border-radius: 5px;
+  background-color: var(--bgSvetlejsia);
+  color: var(--textPrimary);
+}
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--secondary);
+  opacity: 1; /* Firefox */
+}
 
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: var(--secondary);
+}
 
-.titleInputBox{
-    margin: 70px 0 25px 0;
-    display: flex;
-    flex-direction: column;
-    padding: 0 20px;
-    gap: 10px;
-    position: relative;
-  }
-  .titleInputBox::after{
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(50%);
-    height: 3px;
-    background-color: var(--field);
-  }
-  .titleInputBox input{
-    border: none;
-    outline: none;
-    padding: 10px;
-    min-height: 20px;
-    border-radius: 5px;
-    background-color: var(--bgSvetlejsia);
-    color: var(--textPrimary);
-  }
-  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: var(--secondary);
-    opacity: 1; /* Firefox */
-  }
-  
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: var(--secondary);
-  }
-  
-  ::-ms-input-placeholder { /* Microsoft Edge */
-    color: var(--secondary);
-  }
-  
-.titleInputBox button{
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: var(--secondary);
+}
+
+.titleInputBox button {
   border: none;
   cursor: pointer;
   padding: 10px;

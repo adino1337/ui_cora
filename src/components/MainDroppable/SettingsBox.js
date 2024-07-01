@@ -32,7 +32,11 @@ export default function SettingsBox(props) {
             }}
           ></div>
 
-          <div className="radioButtons" style={{ border: border }} onChange={onChangeValue}>
+          <div
+            className="radioButtons"
+            style={{ border: border }}
+            onChange={onChangeValue}
+          >
             <h4>Šablóna</h4>
             <div className="inputBox">
               <label for={`15|85 ${props.rowIndex}`}>15% | 85%</label>
@@ -52,7 +56,6 @@ export default function SettingsBox(props) {
                 value="85|15"
                 id={`85|15 ${props.rowIndex}`}
                 checked={props.stencil === "85|15"}
-
               />
             </div>
 
@@ -64,7 +67,6 @@ export default function SettingsBox(props) {
                 value="50|50"
                 id={`50|50 ${props.rowIndex}`}
                 checked={props.stencil === "50|50"}
-
               />
             </div>
           </div>

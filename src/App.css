@@ -13,11 +13,11 @@
   background-color: var(--bgTmavsia);
 }
 
-.themeButtons{
+.themeButtons {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 20px;  
+  gap: 20px;
 }

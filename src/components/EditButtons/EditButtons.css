@@ -1,36 +1,35 @@
+.info {
+  margin: 0 50px 0 30px;
+  display: flex;
+  justify-content: space-between;
+}
 
-.info{
-    margin: 0 50px 0 30px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-.info > .text h1{
-    color: var(--secondary);
-    margin: 0.67em 0 0.27em 0;
-  }
-.info > .text p{
-    color: var(--textSecondary);
-    margin: 0;
-    margin-bottom: 10px;
-  }
-  
-  .info .buttons{
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: center;
-    align-items: center;
-    gap: 20px ;
-  }
-  .info .buttons button{
-    margin: 0 !important;
-    min-width: 150px;
-    padding: 15px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    background-color: var(--field);
-    transition-duration: 250ms;
-    color: var(--textPrimary);
-  }
+.info > .text h1 {
+  color: var(--secondary);
+  margin: 0.67em 0 0.27em 0;
+}
+.info > .text p {
+  color: var(--textSecondary);
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.info .buttons {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.info .buttons button {
+  margin: 0 !important;
+  min-width: 150px;
+  padding: 15px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: var(--field);
+  transition-duration: 250ms;
+  color: var(--textPrimary);
+}
