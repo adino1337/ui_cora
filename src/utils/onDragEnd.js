@@ -61,6 +61,15 @@ const moveToBuildArea = (result, setBuildArea, uiBlocks, titleBlocks) => {
   return addToColumn(movedField, setBuildArea, destinationList, result);
 }
 
+const moveColumn = (result, buildArea) => {
+  const sourceList = result.source.droppableId;
+  const destinationList = result.destination.droppableId;
+  const sourceRowId = getRowId(sourceList);
+  const destinationRowId = getRowId(destinationList);
+  const sourceRow = buildArea[sourceRowId];
+  return moveToList(sourceRow, buildArea[destinationRowId], result);
+}
+
 const editBuildArea = (result, buildArea, setBuildArea, uiBlocks, titleBlocks) => {
   const sourceList = result.source.droppableId;
   const destinationList = result.destination.droppableId;
@@ -70,10 +79,7 @@ const editBuildArea = (result, buildArea, setBuildArea, uiBlocks, titleBlocks) =
   }
   // Moving column within build area
   if (isColumn(sourceList) && isColumn(destinationList)) {
-    const sourceRowId = getRowId(sourceList);
-    const destinationRowId = getRowId(destinationList);
-    const sourceRow = buildArea[sourceRowId];
-    return moveToList(sourceRow, buildArea[destinationRowId], result);
+    moveColumn(result, buildArea);
   }
   // Create a new row from moving column from another row
   if (isColumn(sourceList) && shouldCreateRowWithColumn(destinationList)) {
@@ -177,7 +183,6 @@ export const onDragEnd = (result, buildArea, setBuildArea, setDragEnd, uiBlocks,
     }
     // Return block back to default lists
     // From build area to UIblocks list
-    console.log(sourceList, destinationList);
     if (sourceList !== "uiBlocks-list" && destinationList === "uiBlocks-list") {
       return returnUiBlock(sourceList, buildArea, uiBlocks, result);
     }
