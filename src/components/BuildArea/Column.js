@@ -39,7 +39,7 @@ export default function Column({ props }) {
               {(providedCol, snapshot) => {
                 let styles = snapshot.isDraggingOver
                   ? {
-                      background: `linear-gradient(-45deg, ${props.themeStyles.bgTmavsia} 25%, transparent 25%, transparent 50%, ${props.themeStyles.bgTmavsia} 50%, ${props.themeStyles.bgTmavsia} 75%, transparent 75%, transparent)`,
+                      background: `linear-gradient(-45deg, #e2e2e2 25%, transparent 25%, transparent 50%, #e2e2e2 50%, #e2e2e2 75%, transparent 75%, transparent)`,
                       backgroundSize: "20px 20px",
                     }
                   : {};

@@ -49,8 +49,6 @@ export default function Row({ props }) {
             <>
               {props.row.length === 2 && !props.edit && (
                 <SettingsBox
-                  theme={props.theme}
-                  themeStyles={props.themeStyles}
                   setStencil={setStencil}
                   stencil={stencil}
                   rowIndex={props.rowIndex}
@@ -88,7 +86,7 @@ export default function Row({ props }) {
                           {(provided, snapshot) => {
                             let styles = snapshot.isDraggingOver
                               ? {
-                                  background: `linear-gradient(-45deg, ${props.themeStyles.bgSvetlejsia} 25%, transparent 25%, transparent 50%, ${props.themeStyles.bgSvetlejsia} 50%, ${props.themeStyles.bgSvetlejsia} 75%, transparent 75%, transparent)`,
+                                  background: `linear-gradient(-45deg, #fff 25%, transparent 25%, transparent 50%, #fff 50%, #fff 75%, transparent 75%, transparent)`,
                                   backgroundSize: "20px 20px",
                                 }
                               : {};

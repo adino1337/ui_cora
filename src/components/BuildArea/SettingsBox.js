@@ -9,17 +9,14 @@ export default function SettingsBox(props) {
     console.log(event.target.value);
   }
 
-  let border =
-    props.theme === "dark"
-      ? `3px solid ${props.themeStyles.secondary}`
-      : "3px solid black";
+  let border = "3px solid black";
 
   return (
     <div className="settings">
       <Settings
         className="icon"
         size={18}
-        color={props.theme === "dark" ? props.themeStyles.secondary : "black"}
+        color={"black"}
         onClick={() => setOpenClassMenu((prev) => !prev)}
       />
       {openClassMenu && (
@@ -27,8 +24,7 @@ export default function SettingsBox(props) {
           <div
             className="stvorec"
             style={{
-              background:
-                props.theme === "dark" ? props.themeStyles.secondary : "black",
+              background: "black",
             }}
           ></div>
 

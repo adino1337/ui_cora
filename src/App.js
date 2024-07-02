@@ -3,14 +3,12 @@ import { DragDropContext } from "react-beautiful-dnd";
 import "./App.css";
 import schema from "./schemas/schema_3.json";
 import Sidebar from "./components/Sidebar/Sidebar";
-import getThemeStyles from "./assets/themes";
 import Marks from "./components/Marks/Marks";
 import UiBlockPanel from "./components/UiBlockPanel/UiBlockPanel";
 import TitleForm from "./components/TitlePanel/TitleForm/TitleForm";
 import TitlePanel from "./components/TitlePanel/TitlePanel";
 import BuildArea from "./components/BuildArea/BuildArea";
 import EditButtons from "./components/EditButtons/EditButtons";
-import { ThemeButtons } from "./assets/themes";
 import { onDragEnd } from "./utils/onDragEnd";
 
 function App() {
@@ -52,30 +50,6 @@ function App() {
     else setUiBlocks((prev) => [movedField, ...prev]);
     setDragEnd((prev) => !prev); // for check if row or column is not empty to be deleted
   };
-
-  const [theme, setTheme] = useState("");
-  const [themeStyles, setThemeStyles] = useState({});
-
-  useEffect(() => {
-    if (localStorage.getItem("theme")) setTheme(localStorage.getItem("theme"));
-    else setTheme("light");
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    setThemeStyles(getThemeStyles(theme));
-  }, [theme]);
-
-  function setThemeVariables(themeStyles) {
-    const root = document.querySelector(":root");
-    for (const [property, value] of Object.entries(themeStyles)) {
-      root.style.setProperty(`--${property}`, value);
-    }
-  }
-
-  useEffect(() => {
-    setThemeVariables(themeStyles);
-  }, [themeStyles]);
 
   const generate = () => {
     let fieldData = buildArea.map((group) =>
@@ -141,26 +115,19 @@ function App() {
           <Sidebar
             edit={true}
             title="Záložky"
-            bgColor={themeStyles.bgTmavsia}
+            bgColor={"#e2e2e2"}
             nextBgColor={
-              edit ? themeStyles.bgSvetlejsia : themeStyles.bgTmavsia
+              edit ? "#fff" : "#e2e2e2"
             }
-            theme={theme}
           >
             <Marks edit={edit}/>
-            <ThemeButtons
-              setTheme={setTheme}
-              theme={theme}
-              themeStyles={themeStyles}
-            />
           </Sidebar>
 
           <Sidebar
             edit={edit}
             title="UI bloky"
-            bgColor={themeStyles.bgSvetlejsia}
-            nextBgColor={themeStyles.bgTmavsia}
-            theme={theme}
+            bgColor={"#fff"}
+            nextBgColor={"#e2e2e2"}
           >
             <UiBlockPanel edit={edit} uiBlocks={uiBlocks} />
           </Sidebar>
@@ -168,11 +135,10 @@ function App() {
           <Sidebar
             edit={edit}
             title="Nadpisy"
-            bgColor={themeStyles.bgTmavsia}
-            nextBgColor={themeStyles.bgTmavsia}
-            theme={theme}
+            bgColor={"#e2e2e2"}
+            nextBgColor={"#e2e2e2"}
           >
-            <TitleForm setTitleBlocks={setTitleBlocks} theme={theme} />
+            <TitleForm setTitleBlocks={setTitleBlocks}/>
             <TitlePanel
               edit={edit}
               titleBlocks={titleBlocks}
@@ -182,15 +148,12 @@ function App() {
 
           <div className="right-panel-wrapper">
             <EditButtons
-              theme={theme}
               generate={generate}
               setEdit={setEdit}
               edit={edit}
             />
             <BuildArea
-              themeStyles={themeStyles}
               edit={edit}
-              theme={theme}
               buildArea={buildArea}
               deleteField={deleteField}
               setBuildArea={setBuildArea}
