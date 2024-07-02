@@ -6,7 +6,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import getThemeStyles from "./assets/themes";
 import Marks from "./components/Marks/Marks";
 import UiBlockPanel from "./components/UiBlockPanel/UiBlockPanel";
-import TitleForm from "./components/TitleForm/TitleForm";
+import TitleForm from "./components/TitlePanel/TitleForm/TitleForm";
 import TitlePanel from "./components/TitlePanel/TitlePanel";
 import BuildArea from "./components/BuildArea/BuildArea";
 import EditButtons from "./components/EditButtons/EditButtons";
@@ -16,10 +16,7 @@ import { onDragEnd } from "./utils/onDragEnd";
 function App() {
   const [uiBlocks, setUiBlocks] = useState(schema);
   const [titleBlocks, setTitleBlocks] = useState([]);
-  const [marks, setMarks] = useState([[]]);
-  const [markNames, setMarkNames] = useState(["Formulár"]);
-  const [activeMark, setActiveMark] = useState(0);
-  const [buildArea, setBuildArea] = useState(marks[activeMark]);
+  const [buildArea, setBuildArea] = useState([]);
   const [edit, setEdit] = useState(true);
   const [dragEnd, setDragEnd] = useState(false);
 
@@ -32,7 +29,14 @@ function App() {
   }, [dragEnd]);
 
   const handleOnDragEnd = (result) => {
-    onDragEnd(result, buildArea, setBuildArea, setDragEnd, uiBlocks, titleBlocks);
+    onDragEnd(
+      result,
+      buildArea,
+      setBuildArea,
+      setDragEnd,
+      uiBlocks,
+      titleBlocks
+    );
   };
 
   const deleteField = (rowIndex, columnIndex, fieldIndex, fieldType) => {
@@ -74,46 +78,44 @@ function App() {
   }, [themeStyles]);
 
   const generate = () => {
-    let fieldData = marks.map((mark) =>
-      mark.map((group) =>
-        group.map((row) =>
-          row.map((col) => {
-            if (col.type === "title") {
-              let TitleText = col.title.split(" ");
-              TitleText.shift();
-              let text = TitleText.join(" ");
-              if (col.className === null)
-                return {
-                  title: text,
-                };
-              else
-                return {
-                  title: text,
-                  className: col.className,
-                };
-            } else if (col.type === "line")
+    let fieldData = buildArea.map((group) =>
+      group.map((row) =>
+        row.map((col) => {
+          if (col.type === "title") {
+            let TitleText = col.title.split(" ");
+            TitleText.shift();
+            let text = TitleText.join(" ");
+            if (col.className === null)
               return {
-                customComponent: "Line",
+                title: text,
               };
-            else {
-              if (col.className === null)
-                return {
-                  field: col.field,
-                };
-              else
-                return {
-                  field: col.field,
-                  className: col.className,
-                };
-            }
-          })
-        )
+            else
+              return {
+                title: text,
+                className: col.className,
+              };
+          } else if (col.type === "line")
+            return {
+              customComponent: "Line",
+            };
+          else {
+            if (col.className === null)
+              return {
+                field: col.field,
+              };
+            else
+              return {
+                field: col.field,
+                className: col.className,
+              };
+          }
+        })
       )
     );
-
+    /*
     fieldData = fieldData.map((mark, i) => {
       return [{ markName: markNames[i] }, ...mark];
-    });
+    });*/
 
     const jsonData = JSON.stringify(fieldData, null, 2);
     // Vytvořte Blob objekt z JSON dat
@@ -132,53 +134,6 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
-  useEffect(() => {
-    const updatedMarks = [...marks];
-    updatedMarks[activeMark] = buildArea;
-    setMarks(updatedMarks);
-  }, [buildArea]);
-
-  const deleteMark = (index) => {
-    if (marks[index] && marks[index][0]) {
-      marks[index].forEach((row) => {
-        row.forEach((col) => {
-          col.forEach((field) => {
-            if (field.type && field.type === "title")
-              setTitleBlocks((prev) => [field, ...prev]);
-            else if (field.type && field.type === "line") return;
-            else setUiBlocks((prev) => [field, ...prev]);
-          });
-        });
-      });
-    }
-
-    setMarkNames((prev) => prev.filter((name, id) => id !== index));
-    setMarks((prev) => {
-      if (index === activeMark) {
-        setActiveMark(0);
-        setBuildArea(marks[0]);
-      } else if (index < activeMark) {
-        setBuildArea(marks[activeMark]);
-        setActiveMark((prev) => prev - 1);
-      }
-      return prev.filter((mark, markID) => markID !== index);
-    });
-  };
-
-  const changeMark = (index) => {
-    setActiveMark(index);
-    setBuildArea(marks[index]);
-  };
-
-  const [buttonClicked, setButtonClicked] = useState(false);
-
-  useEffect(() => {
-    if (buttonClicked) {
-      changeMark(marks.length - 1);
-      setButtonClicked(false);
-    }
-  }, [buttonClicked, marks]);
-
   return (
     <>
       <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -192,19 +147,7 @@ function App() {
             }
             theme={theme}
           >
-            <Marks
-              activeMark={activeMark}
-              themeStyles={themeStyles}
-              theme={theme}
-              edit={edit}
-              markNames={markNames}
-              changeMark={changeMark}
-              deleteMark={deleteMark}
-              setMarkNames={setMarkNames}
-              setMarks={setMarks}
-              marks={marks}
-              setButtonClicked={setButtonClicked}
-            />
+            <Marks edit={edit}/>
             <ThemeButtons
               setTheme={setTheme}
               theme={theme}
@@ -243,7 +186,6 @@ function App() {
               generate={generate}
               setEdit={setEdit}
               edit={edit}
-              markName={markNames[activeMark]}
             />
             <BuildArea
               themeStyles={themeStyles}

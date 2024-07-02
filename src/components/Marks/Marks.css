@@ -11,3 +11,22 @@
 .marks::-webkit-scrollbar {
   display: none;
 }
+
+.markText {
+  color: #1565c0;
+  font-weight: bold;
+  font-size: 2rem;
+  padding-left: 2rem;
+}
+
+.addMark {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #1565c0;
+  color: white;
+  font-size: 24px;
+}
