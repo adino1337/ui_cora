@@ -1,6 +1,6 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import "./Row.css";
-import Column from "../Column";
+import Column from "../Column/Column";
 import Line from "../customComponents/Line/Line";
 
 export default function Row({ props }) {
