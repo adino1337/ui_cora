@@ -6,15 +6,17 @@ import PanelClose from "./PanelClose";
 export default function Sidebar(props) {
   const [sidePanel, setSidePanel] = useState(true);
 
+  console.log(props)
   if (props.orientation !== "horizontal" && props.edit) {
     return (
       <div
-        className={`side-panel ${sidePanel ? "expanded" : "collapsed"}`}
+        className={`side-panel ${sidePanel ? "expanded" : "collapsed"} ${props.even ? "even" : "odd"}`}
         //Rework open/close handler
         onClick={(e) => {
           if (
             e.target.className === "close-panel-icon" ||
-            e.target.className === "side-panel expanded"
+            e.target.className === "side-panel expanded even" ||
+            e.target.className === "side-panel expanded odd"
           )
             setSidePanel(false);
           else setSidePanel(true);
@@ -30,19 +32,12 @@ export default function Sidebar(props) {
   } else if (props.edit) {
     return (
       <div
-        className="horizontal-side-panel"
-        style={{
-          minHeight: sidePanel ? "150px" : "40px",
-          height: sidePanel ? "150px" : "40px",
-          backgroundColor: props.bgColor,
-          position: "relative",
-          width: sidePanel && "calc(100% - 40px)",
-          cursor: "pointer",
-        }}
+        className={`horizontal-side-panel ${sidePanel ? "horizontal-expanded" : "horizontal-collapsed"} ${props.even ? "even" : "odd"}`}
         onClick={(e) => {
           if (
             e.target.className === "close-panel-icon-horizontal" ||
-            e.target.className === "horizontal-side-panel"
+            e.target.className === "horizontal-side-panel horizontal-expanded even" ||
+            e.target.className === "horizontal-side-panel horizontal-expanded odd"
           )
             setSidePanel(false);
           else setSidePanel(true);

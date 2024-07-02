@@ -22,8 +22,7 @@ export default function BuildArea(props) {
             <Sidebar
               orientation="horizontal"
               title="Ďalšie komponenty"
-              bgColor="#e2e2e2"
-              nextBgColor="#fff"
+              even={false}
               edit={props.edit}
             >
               <LineBtn setBuildArea={props.setBuildArea} />
