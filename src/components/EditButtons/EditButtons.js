@@ -12,7 +12,7 @@ export default function EditButtons(props) {
 
       <div className="buttons">
         <button onClick={props.generate} style={{ fontWeight: "bold" }}>
-          GENEROVAŤ
+          Uložiť
         </button>
         <button onClick={() => props.setEdit((prev) => !prev)}>
           {props.edit ? "Náhľad" : "Upraviť"}
