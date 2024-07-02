@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Sidebar.css";
-import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp } from "lucide-react";
+import Panel from "./Panel";
+import PanelClose from "./PanelClose";
 
 export default function Sidebar(props) {
   const [sidePanel, setSidePanel] = useState(true);
@@ -8,55 +9,21 @@ export default function Sidebar(props) {
   if (props.orientation !== "horizontal" && props.edit) {
     return (
       <div
-        className="side-panel"
-        style={{
-          width: sidePanel ? "15%" : "75px",
-          backgroundColor: props.bgColor,
-          cursor: "pointer",
-          borderRight: "3px solid black",
-        }}
+        className={`side-panel ${sidePanel ? "expanded" : "collapsed"}`}
+        //Rework open/close handler
         onClick={(e) => {
           if (
             e.target.className === "close-panel-icon" ||
-            e.target.className === "side-panel"
+            e.target.className === "side-panel expanded"
           )
             setSidePanel(false);
           else setSidePanel(true);
         }}
       >
         {sidePanel ? (
-          <>
-            <h1
-              className="close-panel-icon"
-              onClick={() => {
-                setSidePanel(false);
-              }}
-            >
-              {<ArrowLeft />}
-            </h1>
-            <h4 className="side-panel-title">{props.title}</h4>
-            {props.children}
-            <div
-              className="side-panel-bg"
-              style={{ backgroundColor: props.nextBgColor }}
-            ></div>
-          </>
+          <PanelClose title={props.title} children={props.children} isHorizontal={false} setSidePanel={setSidePanel}/>
         ) : (
-          <>
-            <h1 className="sidewaysText">{props.title}</h1>
-            <h1
-              className="open-panel-icon"
-              onClick={() => {
-                setSidePanel(true);
-              }}
-            >
-              {<ArrowRight />}
-            </h1>
-            <div
-              className="side-panel-bg"
-              style={{ backgroundColor: props.nextBgColor }}
-            ></div>
-          </>
+          <Panel title={props.title} isHorizontal={false} setSidePanel={setSidePanel} />
         )}
       </div>
     );
@@ -82,36 +49,9 @@ export default function Sidebar(props) {
         }}
       >
         {sidePanel ? (
-          <>
-            <h1
-              className="close-panel-icon-horizontal"
-              onClick={() => setSidePanel(false)}
-            >
-              {<ArrowUp />}
-            </h1>
-
-            <h4 className="side-panel-title-horizontal">{props.title}</h4>
-            <div className="components">{props.children}</div>
-
-            <div
-              className="side-panel-bg"
-              style={{ backgroundColor: props.nextBgColor }}
-            ></div>
-          </>
+          <PanelClose title={props.title} children={props.children} isHorizontal={true} setSidePanel={setSidePanel}/>
         ) : (
-          <>
-            <h3 className="side-panel-title-horizontal-open">{props.title}</h3>
-            <h1
-              className="open-panel-icon-horizontal"
-              onClick={() => setSidePanel(true)}
-            >
-              {<ArrowDown />}
-            </h1>
-            <div
-              className="side-panel-bg"
-              style={{ backgroundColor: props.nextBgColor }}
-            ></div>
-          </>
+          <Panel title={props.title} isHorizontal={true} setSidePanel={setSidePanel} />
         )}
       </div>
     );
