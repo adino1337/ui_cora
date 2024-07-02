@@ -26,7 +26,7 @@ export default function BuildArea(props) {
               nextBgColor="#fff"
               edit={props.edit}
             >
-              <LineBtn setBuildArea={props.setBuildArea}/>
+              <LineBtn setBuildArea={props.setBuildArea} />
             </Sidebar>
 
             {props.buildArea.map((row, rowIndex) => (
@@ -42,18 +42,13 @@ export default function BuildArea(props) {
                 type="field"
               >
                 {(provided, snapshot) => {
-                  let styles = snapshot.isDraggingOver
-                    ? {
-                        background: `linear-gradient(-45deg, #e2e2e2 25%, transparent 25%, transparent 50%, #e2e2e2 50%, #e2e2e2 75%, transparent 75%, transparent)`,
-                        backgroundSize: "20px 20px",
-                      }
-                    : {};
                   return (
                     <div
                       ref={provided.innerRef}
-                      className="plusRow"
+                      className={`plusRow ${
+                        snapshot.isDraggingOver ? "draggingOver" : ""
+                      }`}
                       {...provided.droppableProps}
-                      style={styles}
                     >
                       <Droppable
                         key={`addRowWithColumn`}
@@ -62,26 +57,17 @@ export default function BuildArea(props) {
                         type={"column"}
                       >
                         {(provided, snapshot) => {
-                          let styles = snapshot.isDraggingOver
-                            ? {
-                                background: `linear-gradient(-45deg, #e2e2e2 25%, transparent 25%, transparent 50%, #e2e2e2 50%, #e2e2e2 75%, transparent 75%, transparent)`,
-                                backgroundSize: "20px 20px",
-                              }
-                            : {};
                           return (
                             <div
                               ref={provided.innerRef}
-                              className="plusRowWithColumn"
+                              className={`plusRowWithColumn ${
+                                snapshot.isDraggingOver ? "draggingOver" : ""
+                              }`}
                               {...provided.droppableProps}
-                              style={styles}
                             >
                               {props.buildArea.length === 0 ? (
                                 <div className="text">
-                                  <h2
-                                    style={{color: "black",}}
-                                  >
-                                    UI SCHÉMA
-                                  </h2>
+                                  <h2>UI SCHÉMA</h2>
                                   <p>pretiahnite a pustite daný blok</p>
                                   <h4>+</h4>
                                 </div>
