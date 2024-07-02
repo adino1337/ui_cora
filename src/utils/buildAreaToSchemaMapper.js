@@ -1,4 +1,4 @@
-const buildAreaToSchemaMapper = () => {
+const buildAreaToSchemaMapper = (buildArea) => {
   //TODO: ADD MARKS
   let fieldData = buildArea.map((row) =>
     row.map((col) =>

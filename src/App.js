@@ -126,7 +126,7 @@ function App() {
           <div className="right-panel-wrapper">
             <EditButtons
               theme={theme}
-              save={buildAreaToSchemaMapper}
+              save={() => buildAreaToSchemaMapper(buildArea)}
               setEdit={setEdit}
               edit={edit}
             />
