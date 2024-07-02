@@ -3,6 +3,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import "./BuildArea.css";
 import Row from "./Row/Row";
 import LineBtn from "./customComponents/addButtons/LineBtn";
+import AddRowWithField from "./dropzones/AddRowWithField";
 
 export default function BuildArea(props) {
   return (
@@ -34,55 +35,7 @@ export default function BuildArea(props) {
             ))}
             {providedBase.placeholder}
 
-            {props.edit && (
-              <Droppable
-                key={`addRow`}
-                droppableId={`addRow`}
-                direction="vertical"
-                type="field"
-              >
-                {(provided, snapshot) => {
-                  return (
-                    <div
-                      ref={provided.innerRef}
-                      className={`plusRow ${
-                        snapshot.isDraggingOver ? "draggingOver" : ""
-                      }`}
-                      {...provided.droppableProps}
-                    >
-                      <Droppable
-                        key={`addRowWithColumn`}
-                        droppableId={`addRowWithColumn`}
-                        direction="vertical"
-                        type={"column"}
-                      >
-                        {(provided, snapshot) => {
-                          return (
-                            <div
-                              ref={provided.innerRef}
-                              className={`plusRowWithColumn ${
-                                snapshot.isDraggingOver ? "draggingOver" : ""
-                              }`}
-                              {...provided.droppableProps}
-                            >
-                              {props.buildArea.length === 0 ? (
-                                <div className="text">
-                                  <h2>UI SCHÉMA</h2>
-                                  <p>pretiahnite a pustite daný blok</p>
-                                  <h4>+</h4>
-                                </div>
-                              ) : (
-                                <div>+</div>
-                              )}
-                            </div>
-                          );
-                        }}
-                      </Droppable>
-                    </div>
-                  );
-                }}
-              </Droppable>
-            )}
+            {props.edit && <AddRowWithField buildArea={props.buildArea} />}
           </div>
         );
       }}

@@ -2,6 +2,7 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import "./Row.css";
 import Column from "../Column/Column";
 import Line from "../customComponents/Line/Line";
+import AddColumnWithField from "../dropzones/AddColumnWithField";
 
 export default function Row({ props }) {
   return (
@@ -14,9 +15,7 @@ export default function Row({ props }) {
     >
       {(providedField) => {
         if (props.row[0] && props.row[0][0] && props.row[0][0].type === "line")
-          return (
-            <Line props={{...props, providedField}}/>
-          );
+          return <Line props={{ ...props, providedField }} />;
         return (
           <div
             ref={providedField.innerRef}
@@ -45,26 +44,7 @@ export default function Row({ props }) {
                     />
                   ))}
                   {providedRow.placeholder}
-                  {props.edit && (
-                    <Droppable
-                      key={`addColumn-${props.rowIndex}`}
-                      droppableId={`addColumn-${props.rowIndex}`}
-                      direction="vertical"
-                      type="field"
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          className={`plusCol ${
-                            snapshot.isDraggingOver ? "dragging" : ""
-                          }`}
-                          {...provided.droppableProps}
-                        >
-                          +
-                        </div>
-                      )}
-                    </Droppable>
-                  )}
+                  {props.edit && <AddColumnWithField rowIndex={props.rowIndex} />}
                 </div>
               )}
             </Droppable>
