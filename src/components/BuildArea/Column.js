@@ -1,5 +1,5 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import Field from "./Field";
+import Field from "./Field/Field";
 
 export default function Column({ props }) {
   return (
