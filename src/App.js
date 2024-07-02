@@ -163,6 +163,7 @@ function App() {
     });
     if (fieldType === "title") setTitleBlocks((prev) => [movedField, ...prev]);
     else setUiBlocks((prev) => [movedField, ...prev]);
+    setDragEnd((prev) => !prev); // for check if row or column is not empty to be deleted
   };
 
   const [theme, setTheme] = useState("");
