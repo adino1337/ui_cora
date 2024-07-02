@@ -14,14 +14,15 @@
 .left-panel::-webkit-scrollbar {
   display: none;
 }
-.left-panel .field {
+.left-panel .ui-block {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 10px;
   width: 80%;
+  height: fit-content;
   background-color: var(--field);
   color: var(--textPrimary);
-  border-radius: 10px;
+  border-radius: 5px;
 }

@@ -24,7 +24,7 @@ export default function TitlePanel(props) {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className="field"
+                    className="title-block"
                     style={{
                       position: "relative",
                       ...provided.draggableProps.style,

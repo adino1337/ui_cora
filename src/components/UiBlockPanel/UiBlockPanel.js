@@ -24,7 +24,7 @@ export default function UiBlockPanel(props) {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className="field"
+                      className="ui-block"
                       style={{
                         ...provided.draggableProps.style,
                       }}
