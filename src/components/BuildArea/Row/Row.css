@@ -1,0 +1,77 @@
+.line {
+  background: var(--bgTmavsia);
+  display: flex;
+  width: 100%;
+  height: 10px;
+}
+
+.line-container {
+  padding: 20px 0;
+  display: flex;
+}
+
+.line-container.editable {
+  cursor: pointer;
+}
+
+.row {
+  background: var(--bgTmavsia);
+  min-height: fit-content;
+  min-width: 200px;
+  height: fit-content;
+  display: flex;
+  padding: 40px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.row.editable {
+  padding: 20px;
+}
+
+.group {
+  display: flex;
+  background: var(--bgTmavsia);
+  min-height: fit-content;
+  flex: 1;
+  gap: 20px;
+}
+
+.group.dragging {
+  background: linear-gradient(
+    -45deg,
+    var(--bgSvetlejsia) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--bgSvetlejsia) 50%,
+    var(--bgSvetlejsia) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+}
+
+.plusCol {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: var(--field);
+  width: "auto";
+  background-color: var(--bgTmavsia);
+}
+
+.plusCol.dragging {
+  background: linear-gradient(
+    -45deg,
+    var(--bgSvetlejsia) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--bgSvetlejsia) 50%,
+    var(--bgSvetlejsia) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+}

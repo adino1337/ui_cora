@@ -1,7 +1,7 @@
 import { Droppable } from "react-beautiful-dnd";
 import Sidebar from "../Sidebar/Sidebar";
 import "./BuildArea.css";
-import Row from "./Row";
+import Row from "./Row/Row";
 
 export default function BuildArea(props) {
   return (
