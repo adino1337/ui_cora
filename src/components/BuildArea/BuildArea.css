@@ -2,6 +2,7 @@
   width: fit-content;
   flex: 1;
 }
+
 .components button {
   border: none;
   outline: none;
@@ -40,21 +41,25 @@
   align-items: center;
   gap: 10px;
 }
+
 .right-panel .text h2 {
   margin: 0;
   font-size: 28px;
   color: var(--textPrimary);
 }
+
 .right-panel .text p {
   margin: 0;
   font-size: 16px;
   color: var(--textSecondary);
 }
+
 .right-panel .text h4 {
   margin: 0;
   font-size: 32px;
   color: var(--field);
 }
+
 .right-panel {
   width: calc(100% - 100px);
   margin: 0 30px 30px 30px;
@@ -70,9 +75,11 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 .right-panel::-webkit-scrollbar {
   display: none;
 }
+
 .right-panel .line {
   background: var(--bgTmavsia);
   display: flex;
@@ -108,65 +115,6 @@
   min-height: fit-content;
   position: relative;
 }
-.settings {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.settings .icon {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  cursor: pointer;
-}
-.settings input,
-label {
-  cursor: pointer;
-}
-
-.settings .radioButtons {
-  padding: 20px;
-  border-radius: 15px 0 15px 15px;
-  color: var(--textSecondary);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background-color: var(--bgSvetlejsia);
-  position: relative;
-
-  top: 35px;
-  right: -4px;
-  z-index: 180;
-}
-.settings .stvorec {
-  position: absolute;
-  top: 25px;
-  right: 0px;
-  transform: rotate(45deg);
-  width: 20px;
-  height: 20px;
-  z-index: 100;
-}
-.settings .radioButtons h4 {
-  margin: 0;
-  margin-bottom: 20px;
-  position: relative;
-}
-.settings .radioButtons h4::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -15px;
-  background-color: var(--textSecondary);
-  width: 20%;
-  height: 2px;
-}
-.settings .radioButtons .inputBox {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
 
 .right-panel .column-droppable {
   background: var(--bgSvetlejsia);
@@ -176,30 +124,6 @@ label {
   flex-direction: column;
   gap: 10px;
   min-width: 0;
-}
-
-.right-panel .field {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-  background-color: var(--field);
-  color: var(--textPrimary);
-  height: 100%;
-  border-radius: 5px;
-}
-.field .delete {
-  display: none;
-}
-.field:hover .delete {
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
-  padding: 10px;
 }
 
 .plusCol {
@@ -212,6 +136,7 @@ label {
   width: "auto";
   background-color: var(--bgTmavsia);
 }
+
 .plusRow {
   display: flex;
   flex: 1;
@@ -220,6 +145,7 @@ label {
   min-height: 70px;
   position: relative;
 }
+
 .plusRowWithColumn {
   display: flex;
   justify-content: center;

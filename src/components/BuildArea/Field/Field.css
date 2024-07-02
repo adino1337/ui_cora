@@ -1,0 +1,29 @@
+.field {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background-color: var(--field);
+  color: var(--textPrimary);
+  height: 100%;
+  border-radius: 5px;
+}
+
+.field .delete {
+  display: none;
+}
+
+.field:hover .delete {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.title {
+  border: 2px solid #101010;
+}
