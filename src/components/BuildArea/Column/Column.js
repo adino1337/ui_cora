@@ -1,5 +1,5 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import Field from "./Field/Field";
+import Field from "../Field/Field";
 
 export default function Column({ props }) {
   return (
@@ -11,18 +11,12 @@ export default function Column({ props }) {
       isDragDisabled={!props.edit}
     >
       {(providedField) => {
-        let styles = {
-          ...providedField.draggableProps.style,
-        };
-        if (props.edit) styles = { ...styles, maxWidth: "200px" };
-
         return (
           <div
             ref={providedField.innerRef}
             {...providedField.draggableProps}
             {...providedField.dragHandleProps}
-            style={styles}
-            className="column"
+            className={`column ${props.edit ? "column-edit" : ""}`}
           >
             <Droppable
               key={`column-${props.rowIndex}-${props.columnIndex}`}
@@ -31,18 +25,11 @@ export default function Column({ props }) {
               type="field"
             >
               {(providedCol, snapshot) => {
-                let styles = snapshot.isDraggingOver
-                  ? {
-                      background: `linear-gradient(-45deg, #e2e2e2 25%, transparent 25%, transparent 50%, #e2e2e2 50%, #e2e2e2 75%, transparent 75%, transparent)`,
-                      backgroundSize: "20px 20px",
-                    }
-                  : {};
                 return (
                   <div
                     ref={providedCol.innerRef}
-                    className="column-droppable"
+                    className={`column-droppable ${snapshot.isDraggingOver ? "dragging-over" : ""}`}
                     {...providedCol.droppableProps}
-                    style={styles}
                   >
                     {props.column.map((field, fieldIndex) => (
                       <Field
