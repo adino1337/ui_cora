@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import Field from "./Field";
 
-function RealColumn({props}) {
+function RealColumn({ props }) {
   return (
     <Draggable
       key={`column-${props.rowIndex}-${props.columnIndex}-grab`}
@@ -50,74 +51,12 @@ function RealColumn({props}) {
                     {...providedCol.droppableProps}
                     style={styles}
                   >
-                    {props.column.map((field, fieldIndex) => {
-                      if (props.row.length === 2) {
-                        if (props.stencil === "15|85")
-                          field.className =
-                            props.columnIndex === 0
-                              ? "detail-small"
-                              : "detail-large";
-                        else if (props.stencil === "85|15")
-                          field.className =
-                            props.columnIndex === 0
-                              ? "detail-large"
-                              : "detail-small";
-                        else if (props.stencil === "50|50")
-                          field.className = null;
-                      }
-                      let styles =
-                        field.type === "title"
-                          ? {
-                              border: "2px solid #101010",
-                            }
-                          : {};
-                      return (
-                        <Draggable
-                          key={field.field}
-                          draggableId={field.field}
-                          index={fieldIndex}
-                          type="field"
-                          isDragDisabled={!props.edit}
-                        >
-                          {(providedField, snapshot) => (
-                            <div
-                              className="field"
-                              ref={providedField.innerRef}
-                              {...providedField.draggableProps}
-                              {...providedField.dragHandleProps}
-                              style={{
-                                ...styles,
-                                ...providedField.draggableProps.style,
-                              }}
-                            >
-                              {props.edit && (
-                                <div
-                                  className="delete"
-                                  onClick={() => {
-                                    field.type === "title"
-                                      ? props.deleteField(
-                                          props.rowIndex,
-                                          props.columnIndex,
-                                          fieldIndex,
-                                          "title"
-                                        )
-                                      : props.deleteField(
-                                          props.rowIndex,
-                                          props.columnIndex,
-                                          fieldIndex,
-                                          "UIBlock"
-                                        );
-                                  }}
-                                >
-                                  X
-                                </div>
-                              )}
-                              <div>{field.title}</div>
-                            </div>
-                          )}
-                        </Draggable>
-                      );
-                    })}
+                    {props.column.map((field, fieldIndex) => (
+                      <Field
+                        key={fieldIndex}
+                        props={{ ...props, field, fieldIndex }}
+                      />
+                    ))}
                     {providedCol.placeholder}
                   </div>
                 );
@@ -149,7 +88,10 @@ export default function Column(props) {
             {...providedRow.droppableProps}
           >
             {props.row.map((column, columnIndex) => (
-              <RealColumn props={{ ...props, column, columnIndex }} />
+              <RealColumn
+                key={columnIndex}
+                props={{ ...props, column, columnIndex }}
+              />
             ))}
             {providedRow.placeholder}
             {props.edit && (
