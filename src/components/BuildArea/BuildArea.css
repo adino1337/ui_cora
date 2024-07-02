@@ -105,7 +105,7 @@
   display: flex;
   gap: 20px;
 }
-
+/*
 .right-panel .column {
   display: flex;
   flex: 1;
@@ -125,7 +125,7 @@
   gap: 10px;
   min-width: 0;
 }
-
+*/
 .plusCol {
   display: flex;
   flex: 1;
