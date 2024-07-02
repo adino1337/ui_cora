@@ -1,10 +1,7 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Column from "./Column";
-import SettingsBox from "./SettingsBox";
-import { useState } from "react";
 
 export default function Row({ props }) {
-  const [stencil, setStencil] = useState("50|50");
   return (
     <Draggable
       key={`row-${props.rowIndex}-grab`}
@@ -47,15 +44,6 @@ export default function Row({ props }) {
             className="row"
           >
             <>
-              {props.row.length === 2 && !props.edit && (
-                <SettingsBox
-                  theme={props.theme}
-                  themeStyles={props.themeStyles}
-                  setStencil={setStencil}
-                  stencil={stencil}
-                  rowIndex={props.rowIndex}
-                />
-              )}
               <Droppable
                 key={`group-${props.rowIndex}`}
                 droppableId={`group-${props.rowIndex}`}
