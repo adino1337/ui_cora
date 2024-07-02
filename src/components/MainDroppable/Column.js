@@ -1,6 +1,135 @@
 import { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
+function RealColumn({props}) {
+  return (
+    <Draggable
+      key={`column-${props.rowIndex}-${props.columnIndex}-grab`}
+      draggableId={`column-${props.rowIndex}-${props.columnIndex}-grab`}
+      index={props.columnIndex}
+      type="column"
+      isDragDisabled={!props.edit}
+    >
+      {(providedField) => {
+        let styles = {
+          ...providedField.draggableProps.style,
+        };
+        if (props.edit) styles = { ...styles, maxWidth: "200px" };
+        else if (props.stencil === "50|50")
+          styles = { ...styles, minWidth: "0" };
+        else if (props.stencil === "15|85" && props.columnIndex === 0)
+          styles = { ...styles, maxWidth: "15%" };
+        else if (props.stencil === "85|15" && props.columnIndex === 1)
+          styles = { ...styles, maxWidth: "15%" };
+
+        return (
+          <div
+            ref={providedField.innerRef}
+            {...providedField.draggableProps}
+            {...providedField.dragHandleProps}
+            style={styles}
+            className="column"
+          >
+            <Droppable
+              key={`column-${props.rowIndex}-${props.columnIndex}`}
+              droppableId={`column-${props.rowIndex}-${props.columnIndex}`}
+              direction="vertical"
+              type="field"
+            >
+              {(providedCol, snapshot) => {
+                let styles = snapshot.isDraggingOver
+                  ? {
+                      background: `linear-gradient(-45deg, ${props.themeStyles.bgTmavsia} 25%, transparent 25%, transparent 50%, ${props.themeStyles.bgTmavsia} 50%, ${props.themeStyles.bgTmavsia} 75%, transparent 75%, transparent)`,
+                      backgroundSize: "20px 20px",
+                    }
+                  : {};
+                return (
+                  <div
+                    ref={providedCol.innerRef}
+                    className="column-droppable"
+                    {...providedCol.droppableProps}
+                    style={styles}
+                  >
+                    {props.column.map((field, fieldIndex) => {
+                      if (props.row.length === 2) {
+                        if (props.stencil === "15|85")
+                          field.className =
+                            props.columnIndex === 0
+                              ? "detail-small"
+                              : "detail-large";
+                        else if (props.stencil === "85|15")
+                          field.className =
+                            props.columnIndex === 0
+                              ? "detail-large"
+                              : "detail-small";
+                        else if (props.stencil === "50|50")
+                          field.className = null;
+                      }
+                      let styles =
+                        field.type === "title"
+                          ? {
+                              border: "2px solid #101010",
+                            }
+                          : {};
+                      return (
+                        <Draggable
+                          key={field.field}
+                          draggableId={field.field}
+                          index={fieldIndex}
+                          type="field"
+                          isDragDisabled={!props.edit}
+                        >
+                          {(providedField, snapshot) => (
+                            <div
+                              className="field"
+                              ref={providedField.innerRef}
+                              {...providedField.draggableProps}
+                              {...providedField.dragHandleProps}
+                              style={{
+                                ...styles,
+                                ...providedField.draggableProps.style,
+                              }}
+                            >
+                              {props.edit && (
+                                <div
+                                  className="delete"
+                                  onClick={() => {
+                                    field.type === "title"
+                                      ? props.deleteField(
+                                          props.rowIndex,
+                                          props.columnIndex,
+                                          fieldIndex,
+                                          "title"
+                                        )
+                                      : props.deleteField(
+                                          props.rowIndex,
+                                          props.columnIndex,
+                                          fieldIndex,
+                                          "UIBlock"
+                                        );
+                                  }}
+                                >
+                                  X
+                                </div>
+                              )}
+                              <div>{field.title}</div>
+                            </div>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                    {providedCol.placeholder}
+                  </div>
+                );
+              }}
+            </Droppable>
+          </div>
+        );
+      }}
+    </Draggable>
+  );
+}
+
 export default function Column(props) {
   const [width, setWidth] = useState("auto");
   return (
@@ -20,130 +149,7 @@ export default function Column(props) {
             {...providedRow.droppableProps}
           >
             {props.row.map((column, columnIndex) => (
-              <Draggable
-                key={`column-${props.rowIndex}-${columnIndex}-grab`}
-                draggableId={`column-${props.rowIndex}-${columnIndex}-grab`}
-                index={columnIndex}
-                type="column"
-                isDragDisabled={!props.edit}
-              >
-                {(providedField, snapshot) => {
-                  let styles = {
-                    ...providedField.draggableProps.style,
-                  };
-                  if (props.edit) styles = { ...styles, maxWidth: "200px" };
-                  else if (props.stencil === "50|50")
-                    styles = { ...styles, minWidth: "0" };
-                  else if (props.stencil === "15|85" && columnIndex === 0)
-                    styles = { ...styles, maxWidth: "15%" };
-                  else if (props.stencil === "85|15" && columnIndex === 1)
-                    styles = { ...styles, maxWidth: "15%" };
-
-                  return (
-                    <div
-                      ref={providedField.innerRef}
-                      {...providedField.draggableProps}
-                      {...providedField.dragHandleProps}
-                      style={styles}
-                      className="column"
-                    >
-                      <Droppable
-                        key={`column-${props.rowIndex}-${columnIndex}`}
-                        droppableId={`column-${props.rowIndex}-${columnIndex}`}
-                        direction="vertical"
-                        type="field"
-                      >
-                        {(providedCol, snapshot) => {
-                          let styles = snapshot.isDraggingOver
-                            ? {
-                                background: `linear-gradient(-45deg, ${props.themeStyles.bgTmavsia} 25%, transparent 25%, transparent 50%, ${props.themeStyles.bgTmavsia} 50%, ${props.themeStyles.bgTmavsia} 75%, transparent 75%, transparent)`,
-                                backgroundSize: "20px 20px",
-                              }
-                            : {};
-                          return (
-                            <div
-                              ref={providedCol.innerRef}
-                              className="column-droppable"
-                              {...providedCol.droppableProps}
-                              style={styles}
-                            >
-                              {column.map((field, fieldIndex) => {
-                                if (props.row.length === 2) {
-                                  if (props.stencil === "15|85")
-                                    field.className =
-                                      columnIndex === 0
-                                        ? "detail-small"
-                                        : "detail-large";
-                                  else if (props.stencil === "85|15")
-                                    field.className =
-                                      columnIndex === 0
-                                        ? "detail-large"
-                                        : "detail-small";
-                                  else if (props.stencil === "50|50")
-                                    field.className = null;
-                                }
-                                let styles =
-                                  field.type === "title"
-                                    ? {
-                                        border: "2px solid #101010",
-                                      }
-                                    : {};
-                                return (
-                                  <Draggable
-                                    key={field.field}
-                                    draggableId={field.field}
-                                    index={fieldIndex}
-                                    type="field"
-                                    isDragDisabled={!props.edit}
-                                  >
-                                    {(providedField, snapshot) => (
-                                      <div
-                                        className="field"
-                                        ref={providedField.innerRef}
-                                        {...providedField.draggableProps}
-                                        {...providedField.dragHandleProps}
-                                        style={{
-                                          ...styles,
-                                          ...providedField.draggableProps.style,
-                                        }}
-                                      >
-                                        {props.edit && (
-                                          <div
-                                            className="delete"
-                                            onClick={() => {
-                                              field.type === "title"
-                                                ? props.deleteField(
-                                                    props.rowIndex,
-                                                    columnIndex,
-                                                    fieldIndex,
-                                                    "title"
-                                                  )
-                                                : props.deleteField(
-                                                    props.rowIndex,
-                                                    columnIndex,
-                                                    fieldIndex,
-                                                    "UIBlock"
-                                                  );
-                                            }}
-                                          >
-                                            X
-                                          </div>
-                                        )}
-                                        <div>{field.title}</div>
-                                      </div>
-                                    )}
-                                  </Draggable>
-                                );
-                              })}
-                              {providedCol.placeholder}
-                            </div>
-                          );
-                        }}
-                      </Droppable>
-                    </div>
-                  );
-                }}
-              </Draggable>
+              <RealColumn props={{ ...props, column, columnIndex }} />
             ))}
             {providedRow.placeholder}
             {props.edit && (
