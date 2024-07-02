@@ -13,8 +13,7 @@ export default function Sidebar(props) {
           width: sidePanel ? "15%" : "75px",
           backgroundColor: props.bgColor,
           cursor: "pointer",
-          borderRight:
-            props.theme === "light" ? "3px solid black" : "3px solid black",
+          borderRight: "3px solid black",
         }}
         onClick={(e) => {
           if (

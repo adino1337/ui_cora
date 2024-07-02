@@ -25,7 +25,7 @@ export default function TitleForm(props) {
         value={titleText}
         onChange={(e) => setTitleText(e.target.value)}
         placeholder="Nadpis"
-        style={{ color: props.theme === "light" && "black" }}
+        style={{ color: "black" }}
       />
       <button>Pridať Nadpis</button>
     </form>

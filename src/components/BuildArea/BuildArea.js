@@ -21,10 +21,9 @@ export default function BuildArea(props) {
             <Sidebar
               orientation="horizontal"
               title="Ďalšie komponenty"
-              bgColor={props.themeStyles.bgTmavsia}
-              nextBgColor={props.themeStyles.bgSvetlejsia}
+              bgColor="#e2e2e2"
+              nextBgColor="#fff"
               edit={props.edit}
-              theme={props.theme}
             >
               <button
                 onClick={() => {
@@ -52,7 +51,7 @@ export default function BuildArea(props) {
                 {(provided, snapshot) => {
                   let styles = snapshot.isDraggingOver
                     ? {
-                        background: `linear-gradient(-45deg, ${props.themeStyles.bgTmavsia} 25%, transparent 25%, transparent 50%, ${props.themeStyles.bgTmavsia} 50%, ${props.themeStyles.bgTmavsia} 75%, transparent 75%, transparent)`,
+                        background: `linear-gradient(-45deg, #e2e2e2 25%, transparent 25%, transparent 50%, #e2e2e2 50%, #e2e2e2 75%, transparent 75%, transparent)`,
                         backgroundSize: "20px 20px",
                       }
                     : {};
@@ -72,7 +71,7 @@ export default function BuildArea(props) {
                         {(provided, snapshot) => {
                           let styles = snapshot.isDraggingOver
                             ? {
-                                background: `linear-gradient(-45deg, ${props.themeStyles.bgTmavsia} 25%, transparent 25%, transparent 50%, ${props.themeStyles.bgTmavsia} 50%, ${props.themeStyles.bgTmavsia} 75%, transparent 75%, transparent)`,
+                                background: `linear-gradient(-45deg, #e2e2e2 25%, transparent 25%, transparent 50%, #e2e2e2 50%, #e2e2e2 75%, transparent 75%, transparent)`,
                                 backgroundSize: "20px 20px",
                               }
                             : {};
@@ -86,9 +85,7 @@ export default function BuildArea(props) {
                               {props.buildArea.length === 0 ? (
                                 <div className="text">
                                   <h2
-                                    style={{
-                                      color: props.theme === "light" && "black",
-                                    }}
+                                    style={{color: "black",}}
                                   >
                                     UI SCHÉMA
                                   </h2>
