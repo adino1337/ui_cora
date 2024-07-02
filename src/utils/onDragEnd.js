@@ -1,7 +1,5 @@
 import {
   shouldCreateColumn,
-  getColumnId,
-  getRowId,
   isColumn,
   isField,
   isRow,
@@ -17,96 +15,94 @@ import {
   returnTitleBlock,
   getElement,
   get2Delement,
-} from "./utils";
+} from "./onDragUtils";
 
 const addNewRow = (result, blocks, setBuildArea) => {
   const [movedField] = blocks.splice(result.source.index, 1);
   return setBuildArea((prev) => [...prev, [[movedField]]]);  
 }
 
-const moveWithinArea = (result, buildArea, uiBlocks, titleBlocks, sourceList) => {
-  const rowId = getRowId(sourceList);
-  const columnId = getColumnId(sourceList);
+const moveWithinArea = (result, buildArea, uiBlocks, titleBlocks, sourceId) => {
   // Move within UI blocks
-  if (sourceList === "uiBlocks-list") {
+  if (sourceId === "uiBlocks-list") {
     return updateList(uiBlocks, result);
   }
   // Move within title list
-  if (sourceList === "title-list") {
+  if (sourceId === "title-list") {
     return updateList(titleBlocks, result);
   }
   // Move of field within same column
-  if (isField(sourceList)) {
-    const column = buildArea[rowId][columnId];
+  if (isField(sourceId)) {
+    const column = get2Delement(sourceId, buildArea);
     return updateList(column, result);
   }
   // Move of column within same row
-  if (isColumn(sourceList)) {
-    const row = buildArea[rowId];
+  if (isColumn(sourceId)) {
+    const row = getElement(sourceId, buildArea);
     return updateList(row, result);
   }
   // Move of row within build area
-  if (isRow(sourceList)) {
+  if (isRow(sourceId)) {
     return updateList(buildArea, result);
   }
   return null;
 }
 
-const moveToBuildArea = (result, setBuildArea, uiBlocks, titleBlocks, sourceList, destinationList) => {
-  const blocks = isUIblockList(sourceList) ? uiBlocks : titleBlocks;
+const moveToBuildArea = (result, setBuildArea, uiBlocks, titleBlocks, sourceId, destinationId) => {
+  const blocks = isUIblockList(sourceId) ? uiBlocks : titleBlocks;
   const [movedField] = blocks.splice(result.source.index, 1);
 
-  if (shouldCreateColumn(destinationList))
-    return createColumn(movedField, setBuildArea, destinationList);
+  if (shouldCreateColumn(destinationId))
+    return createColumn(movedField, setBuildArea, destinationId);
 
-  return addToColumn(movedField, setBuildArea, destinationList, result);
+  return addToColumn(movedField, setBuildArea, destinationId, result);
 }
 
-const moveColumn = (result, buildArea, sourceList, destinationList) => {
-  const sourceRow = getElement(sourceList, buildArea);
-  const destinationRow = getElement(destinationList, buildArea);
+const moveColumn = (result, buildArea, sourceId, destinationId) => {
+  const sourceRow = getElement(sourceId, buildArea);
+  const destinationRow = getElement(destinationId, buildArea);
   return moveToList(sourceRow, destinationRow, result);
 }
 
-const addRow = (result, buildArea, setBuildArea, isColumn, sourceList) => {
-  const block = isColumn ? getElement(sourceList, buildArea) : get2Delement(sourceList, buildArea);
+const addRow = (result, buildArea, setBuildArea, isColumn, sourceId) => {
+  const block = isColumn ? getElement(sourceId, buildArea) : get2Delement(sourceId, buildArea);
   const [deletedBlock] = block.splice(result.source.index, 1);
   return setBuildArea((prev) => [...prev, isColumn ? [deletedBlock] : [[deletedBlock]]]);
 }
 
-const moveField = (result, buildArea, setBuildArea, sourceList, destinationList) => {
-  const column = get2Delement(sourceList, buildArea);
+const moveField = (result, buildArea, setBuildArea, sourceId, destinationId) => {
+  const column = get2Delement(sourceId, buildArea);
   const [deletedField] = column.splice(result.source.index, 1);
   // Create new column from field inside build area
-  if (shouldCreateColumn(destinationList)) {
-    return createColumn(deletedField, setBuildArea, destinationList);
+  if (shouldCreateColumn(destinationId)) {
+    return createColumn(deletedField, setBuildArea, destinationId);
   }
   // Move field to a column inside build area
-  return addToColumn(deletedField, setBuildArea, destinationList, result);
+  return addToColumn(deletedField, setBuildArea, destinationId, result);
 }
 
 const editBuildArea = (result, buildArea, setBuildArea, uiBlocks, titleBlocks) => {
-  const sourceList = result.source.droppableId;
-  const destinationList = result.destination.droppableId;
+  const sourceId = result.source.droppableId;
+  const destinationId = result.destination.droppableId;
   // Moved from UI block list or title list
-  if (isUIblockList(sourceList) || isTitleList(sourceList)) {
-    return moveToBuildArea(result, setBuildArea, uiBlocks, titleBlocks, sourceList, destinationList);
+  if (isUIblockList(sourceId) || isTitleList(sourceId)) {
+    return moveToBuildArea(result, setBuildArea, uiBlocks, titleBlocks, sourceId, destinationId);
   }
   // Moving column within build area
-  if (isColumn(sourceList) && isColumn(destinationList)) {
-    return moveColumn(result, buildArea, sourceList, destinationList);
+  if (isColumn(sourceId) && isColumn(destinationId)) {
+    return moveColumn(result, buildArea, sourceId, destinationId);
   }
   // Create a new row from moving column from another row
-  if (isColumn(sourceList) && shouldCreateRowWithColumn(destinationList)) {
-    return addRow(result, buildArea, setBuildArea, true, sourceList);
+  if (isColumn(sourceId) && shouldCreateRowWithColumn(destinationId)) {
+    return addRow(result, buildArea, setBuildArea, true, sourceId);
   }
   // Making new row from field in buildArea
-  if (isField(sourceList) && destinationList === "addRow") {
-    return addRow(result, buildArea, setBuildArea, false, sourceList);
+  if (isField(sourceId) && destinationId === "addRow") {
+    return addRow(result, buildArea, setBuildArea, false, sourceId);
   }
   // Moving field inside of build area
-  if (isField(sourceList)) {
-    return moveField(result, buildArea, setBuildArea, sourceList, destinationList);
+  if (isField(sourceId)) {
+    return moveField(result, buildArea, setBuildArea, sourceId, destinationId);
   }
 }
 
@@ -115,34 +111,34 @@ export const onDragEnd = (result, buildArea, setBuildArea, setDragEnd, uiBlocks,
     // Cant move outside of droppable area
     if (!result.destination) return;
 
-    const sourceList = result.source.droppableId;
-    const destinationList = result.destination.droppableId;
+    const sourceId = result.source.droppableId;
+    const destinationId = result.destination.droppableId;
     // Cant move ui block to title list
-    if (sourceList === "uiBlocks-list" && destinationList === "title-list")
+    if (sourceId === "uiBlocks-list" && destinationId === "title-list")
       return;
     // Cant move title to UIblock list
-    if (sourceList === "title-list" && destinationList === "uiBlocks-list")
+    if (sourceId === "title-list" && destinationId === "uiBlocks-list")
       return;
     // Make new row from UI block
-    if (sourceList === "uiBlocks-list" && destinationList === "addRow")
+    if (sourceId === "uiBlocks-list" && destinationId === "addRow")
       return addNewRow(result, uiBlocks, setBuildArea);
     // Make new row from title
-    if (sourceList === "title-list" && destinationList === "addRow")
+    if (sourceId === "title-list" && destinationId === "addRow")
       return addNewRow(result, titleBlocks, setBuildArea);
     // Move within the same droppable area
-    if (sourceList === destinationList) {
-      return moveWithinArea(result, buildArea, uiBlocks, titleBlocks, sourceList);
+    if (sourceId === destinationId) {
+      return moveWithinArea(result, buildArea, uiBlocks, titleBlocks, sourceId);
     }
-    if (movedToBuildArea(destinationList)) {
+    if (movedToBuildArea(destinationId)) {
       return editBuildArea(result, buildArea, setBuildArea, uiBlocks, titleBlocks);
     }
     // Return block back to default lists
     // From build area to UIblocks list
-    if (sourceList !== "uiBlocks-list" && destinationList === "uiBlocks-list") {
-      return returnUiBlock(sourceList, buildArea, uiBlocks, result);
+    if (sourceId !== "uiBlocks-list" && destinationId === "uiBlocks-list") {
+      return returnUiBlock(sourceId, buildArea, uiBlocks, result);
     }
     // From build area to title list
-    if (sourceList !== "title-list" && destinationList === "title-list") {
-      return returnTitleBlock(sourceList, buildArea, titleBlocks, result);
+    if (sourceId !== "title-list" && destinationId === "title-list") {
+      return returnTitleBlock(sourceId, buildArea, titleBlocks, result);
     }
   };

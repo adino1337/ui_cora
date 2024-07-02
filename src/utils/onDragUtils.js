@@ -4,8 +4,8 @@ export const isRow = (dropId) => dropId.split("-")[0] === "base";
 export const isUIblockList = (dropId) => dropId === "uiBlocks-list";
 export const isTitleList = (dropId) => dropId === "title-list";
 
-export const getColumnId = (dropId) => parseInt(dropId.split("-")[2]);
-export const getRowId = (dropId) => parseInt(dropId.split("-")[1]);
+const getColumnId = (dropId) => parseInt(dropId.split("-")[2]);
+const getRowId = (dropId) => parseInt(dropId.split("-")[1]);
 
 export const shouldCreateColumn = (dropId) =>
   dropId.split("-")[0] === "addColumn";
@@ -18,13 +18,13 @@ export const updateList = (list, dragResult) => {
   list.splice(dragResult.destination.index, 0, deletedField);
 };
 
-export const moveToList = (sourceList, destinationList, dragResult) => {
-  const [deletedField] = sourceList.splice(dragResult.source.index, 1);
-  destinationList.splice(dragResult.destination.index, 0, deletedField);
+export const moveToList = (sourceId, destinationId, dragResult) => {
+  const [deletedField] = sourceId.splice(dragResult.source.index, 1);
+  destinationId.splice(dragResult.destination.index, 0, deletedField);
 };
 
-export const createColumn = (movedField, setBuildArea, destinationList) => {
-  const rowId = getRowId(destinationList);
+export const createColumn = (movedField, setBuildArea, dropId) => {
+  const rowId = getRowId(dropId);
   setBuildArea((prev) => {
     return prev.map((row, i) => {
       return i === rowId ? [...row, [movedField]] : row;
@@ -35,11 +35,11 @@ export const createColumn = (movedField, setBuildArea, destinationList) => {
 export const addToColumn = (
   movedField,
   setBuildArea,
-  destinationList,
+  dropId,
   result
 ) => {
-  const rowId = getRowId(destinationList);
-  const columnId = getColumnId(destinationList);
+  const rowId = getRowId(dropId);
+  const columnId = getColumnId(dropId);
   const destinationIndex = parseInt(result.destination.index);
   setBuildArea((prev) =>
     prev.map((row, rowIndex) => {
