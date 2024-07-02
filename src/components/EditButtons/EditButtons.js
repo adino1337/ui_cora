@@ -11,7 +11,7 @@ export default function EditButtons(props) {
       </div>
 
       <div className="buttons">
-        <button onClick={props.generate} style={{ fontWeight: "bold" }}>
+        <button onClick={props.save} style={{ fontWeight: "bold" }}>
           Uložiť
         </button>
         <button onClick={() => props.setEdit((prev) => !prev)}>
