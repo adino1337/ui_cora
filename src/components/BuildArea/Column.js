@@ -15,12 +15,6 @@ export default function Column({ props }) {
           ...providedField.draggableProps.style,
         };
         if (props.edit) styles = { ...styles, maxWidth: "200px" };
-        else if (props.stencil === "50|50")
-          styles = { ...styles, minWidth: "0" };
-        else if (props.stencil === "15|85" && props.columnIndex === 0)
-          styles = { ...styles, maxWidth: "15%" };
-        else if (props.stencil === "85|15" && props.columnIndex === 1)
-          styles = { ...styles, maxWidth: "15%" };
 
         return (
           <div
