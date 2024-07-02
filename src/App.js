@@ -12,7 +12,7 @@ import BuildArea from "./components/BuildArea/BuildArea";
 import EditButtons from "./components/EditButtons/EditButtons";
 import { ThemeButtons } from "./assets/themes";
 import { onDragEnd } from "./utils/onDragEnd";
-
+import buildAreaToSchemaMapper from "./utils/buildAreaToSchemaMapper";
 function App() {
   const [uiBlocks, setUiBlocks] = useState(schema);
   const [titleBlocks, setTitleBlocks] = useState([]);
@@ -77,63 +77,6 @@ function App() {
     setThemeVariables(themeStyles);
   }, [themeStyles]);
 
-  const generate = () => {
-    let fieldData = buildArea.map((group) =>
-      group.map((row) =>
-        row.map((col) => {
-          if (col.type === "title") {
-            let TitleText = col.title.split(" ");
-            TitleText.shift();
-            let text = TitleText.join(" ");
-            if (col.className === null)
-              return {
-                title: text,
-              };
-            else
-              return {
-                title: text,
-                className: col.className,
-              };
-          } else if (col.type === "line")
-            return {
-              customComponent: "Line",
-            };
-          else {
-            if (col.className === null)
-              return {
-                field: col.field,
-              };
-            else
-              return {
-                field: col.field,
-                className: col.className,
-              };
-          }
-        })
-      )
-    );
-    /*
-    fieldData = fieldData.map((mark, i) => {
-      return [{ markName: markNames[i] }, ...mark];
-    });*/
-
-    const jsonData = JSON.stringify(fieldData, null, 2);
-    // Vytvořte Blob objekt z JSON dat
-    const blob = new Blob([jsonData], { type: "application/json" });
-
-    // Vytvořte URL objekt pro Blob
-    const url = URL.createObjectURL(blob);
-
-    // Vytvořte odkaz pro stažení souboru
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "fields.json";
-    a.click();
-
-    // Uvolnění URL objektu
-    URL.revokeObjectURL(url);
-  };
-
   return (
     <>
       <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -147,7 +90,7 @@ function App() {
             }
             theme={theme}
           >
-            <Marks edit={edit}/>
+            <Marks edit={edit} />
             <ThemeButtons
               setTheme={setTheme}
               theme={theme}
@@ -183,7 +126,7 @@ function App() {
           <div className="right-panel-wrapper">
             <EditButtons
               theme={theme}
-              generate={generate}
+              save={buildAreaToSchemaMapper}
               setEdit={setEdit}
               edit={edit}
             />
