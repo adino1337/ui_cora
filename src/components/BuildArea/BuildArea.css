@@ -10,7 +10,7 @@
 .right-panel .text h2 {
   margin: 0;
   font-size: 28px;
-  color: var(--textPrimary);
+  color: var(--textSecondary);
 }
 
 .right-panel .text p {
@@ -36,7 +36,6 @@
   padding: 20px;
   position: relative;
   overflow-y: scroll;
-  max-height: 80vh;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -63,4 +62,32 @@
   font-size: 32px;
   color: var(--field);
   min-height: 70px;
+}
+
+.plusRow.draggingOver {
+  background: linear-gradient(
+    -45deg,
+    #e2e2e2 25%,
+    transparent 25%,
+    transparent 50%,
+    #e2e2e2 50%,
+    #e2e2e2 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+}
+
+.plusRowWithColumn.draggingOver {
+  background: linear-gradient(
+    -45deg,
+    #e2e2e2 25%,
+    transparent 25%,
+    transparent 50%,
+    #e2e2e2 50%,
+    #e2e2e2 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
 }
