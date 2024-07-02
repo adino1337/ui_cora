@@ -14,7 +14,7 @@
 .left-panel::-webkit-scrollbar {
   display: none;
 }
-.left-panel .field {
+.left-panel .title-block {
   display: flex;
   justify-content: center;
   align-items: center;

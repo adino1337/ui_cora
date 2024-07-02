@@ -18,11 +18,7 @@
   min-width: 0;
 }
 
-.column-edit {
-    max-width: "200px";
-}
-
 .dragging-over {
-    background: linear-gradient(-45deg, #e2e2e2 25%, transparent 25%, transparent 50%, #e2e2e2 50%, #e2e2e2 75%, transparent 75%, transparent);
-    background-size: "20px 20px";
+    background: linear-gradient(-45deg, var(--bgTmavsia) 25%, transparent 25%, transparent 50%, var(--bgTmavsia) 50%, var(--bgTmavsia) 75%, transparent 75%, transparent);
+    background-size: 20px 20px;
 }
