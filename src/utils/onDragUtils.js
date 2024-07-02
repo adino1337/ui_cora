@@ -102,7 +102,6 @@ export const getElement = (dropId, sourceList) => {
 };
 
 export const get2Delement = (dropId, sourceList) => {
-  console.log(dropId);
   const rowId = getRowId(dropId);
   const columnId = getColumnId(dropId);
   return sourceList[rowId][columnId];

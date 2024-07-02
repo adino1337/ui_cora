@@ -45,26 +45,6 @@
   display: none;
 }
 
-.right-panel .column {
-  display: flex;
-  flex: 1;
-  padding: 20px;
-  background-color: var(--bgSvetlejsia);
-  border-radius: 5px;
-  min-height: fit-content;
-  position: relative;
-}
-
-.right-panel .column-droppable {
-  background: var(--bgSvetlejsia);
-  min-height: fit-content;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 0;
-}
-
 .plusRow {
   display: flex;
   flex: 1;
