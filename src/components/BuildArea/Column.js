@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Field from "./Field";
 
-function RealColumn({ props }) {
+export default function Column({ props }) {
   return (
     <Draggable
       key={`column-${props.rowIndex}-${props.columnIndex}-grab`}
@@ -66,67 +65,5 @@ function RealColumn({ props }) {
         );
       }}
     </Draggable>
-  );
-}
-
-export default function Column(props) {
-  const [width, setWidth] = useState("auto");
-  return (
-    <Droppable
-      key={`group-${props.rowIndex}`}
-      droppableId={`group-${props.rowIndex}`}
-      direction="horizontal"
-      type="column"
-    >
-      {(providedRow, snapshotRow) => {
-        let columnMaxWidth = props.edit ? "none" : "120px";
-
-        return (
-          <div
-            ref={providedRow.innerRef}
-            className="group"
-            {...providedRow.droppableProps}
-          >
-            {props.row.map((column, columnIndex) => (
-              <RealColumn
-                key={columnIndex}
-                props={{ ...props, column, columnIndex }}
-              />
-            ))}
-            {providedRow.placeholder}
-            {props.edit && (
-              <Droppable
-                key={`addColumn-${props.rowIndex}`}
-                droppableId={`addColumn-${props.rowIndex}`}
-                direction="vertical"
-                type="field"
-              >
-                {(provided, snapshot) => {
-                  let styles = snapshot.isDraggingOver
-                    ? {
-                        background: `linear-gradient(-45deg, ${props.themeStyles.bgSvetlejsia} 25%, transparent 25%, transparent 50%, ${props.themeStyles.bgSvetlejsia} 50%, ${props.themeStyles.bgSvetlejsia} 75%, transparent 75%, transparent)`,
-                        backgroundSize: "20px 20px",
-                      }
-                    : {};
-                  return (
-                    <div
-                      ref={provided.innerRef}
-                      className="plusCol"
-                      style={{
-                        ...styles,
-                        maxWidth: columnMaxWidth,
-                      }}
-                      {...provided.droppableProps}
-                    >
-                      +
-                    </div>
-                  );
-                }}
-              </Droppable>
-            )}
-          </div>
-        );
-      }}
-    </Droppable>
   );
 }

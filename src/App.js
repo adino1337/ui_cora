@@ -8,7 +8,7 @@ import Marks from "./components/Marks/Marks";
 import UiBlockPanel from "./components/UiBlockPanel/UiBlockPanel";
 import TitleForm from "./components/TitleForm/TitleForm";
 import TitlePanel from "./components/TitlePanel/TitlePanel";
-import MainDroppable from "./components/MainDroppable/MainDroppable";
+import BuildArea from "./components/BuildArea/BuildArea";
 import EditButtons from "./components/EditButtons/EditButtons";
 import { ThemeButtons } from "./assets/themes";
 import {
@@ -361,7 +361,7 @@ function App() {
               edit={edit}
               markName={markNames[activeMark]}
             />
-            <MainDroppable
+            <BuildArea
               themeStyles={themeStyles}
               edit={edit}
               theme={theme}
