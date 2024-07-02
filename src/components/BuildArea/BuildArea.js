@@ -2,6 +2,7 @@ import { Droppable } from "react-beautiful-dnd";
 import Sidebar from "../Sidebar/Sidebar";
 import "./BuildArea.css";
 import Row from "./Row/Row";
+import LineBtn from "./customComponents/addButtons/LineBtn";
 
 export default function BuildArea(props) {
   return (
@@ -25,15 +26,7 @@ export default function BuildArea(props) {
               nextBgColor="#fff"
               edit={props.edit}
             >
-              <button
-                onClick={() => {
-                  props.setBuildArea((prev) => {
-                    return [...prev, [[{ type: "line" }]]];
-                  });
-                }}
-              >
-                Čiara
-              </button>
+              <LineBtn setBuildArea={props.setBuildArea}/>
             </Sidebar>
 
             {props.buildArea.map((row, rowIndex) => (

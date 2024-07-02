@@ -1,6 +1,7 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import "./Row.css";
 import Column from "../Column";
+import Line from "../customComponents/Line/Line";
 
 export default function Row({ props }) {
   return (
@@ -14,20 +15,7 @@ export default function Row({ props }) {
       {(providedField) => {
         if (props.row[0] && props.row[0][0] && props.row[0][0].type === "line")
           return (
-            <div
-              ref={providedField.innerRef}
-              {...providedField.draggableProps}
-              {...providedField.dragHandleProps}
-              className={`line-container ${props.edit ? "editable" : ""}`}
-              onClick={() => {
-                if (props.edit)
-                  props.setBuildArea((prev) =>
-                    prev.filter((row, rowID) => rowID !== props.rowIndex)
-                  );
-              }}
-            >
-              <div className="line"></div>
-            </div>
+            <Line props={{...props, providedField}}/>
           );
         return (
           <div
