@@ -1,5 +1,6 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import "./TitlePanel.css";
+import { Pointer } from "lucide-react";
 export default function TitlePanel(props) {
   return (
     <Droppable droppableId="title-list" type="field">
@@ -39,6 +40,7 @@ export default function TitlePanel(props) {
                             prev.filter((field, id) => id !== index)
                           )
                         }
+                        style={{cursor: "pointer"}}
                       >
                         X
                       </div>
