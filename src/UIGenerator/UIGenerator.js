@@ -10,14 +10,32 @@ import BuildArea from "../components/BuildArea/BuildArea";
 import EditButtons from "../components/EditButtons/EditButtons";
 import { onDragEnd } from "../utils/onDragEnd";
 import buildAreaToSchemaMapper from "../utils/buildAreaToSchemaMapper";
+import customComponentsTypes from "../components/BuildArea/customComponents/customComponentsConfig";
 
-export default function UIGenerator({schema}) {
+export default function UIGenerator({ schema }) {
   const [uiBlocks, setUiBlocks] = useState(schema);
   const [titleBlocks, setTitleBlocks] = useState([]);
-  const [buildArea, setBuildArea] = useState([]);
   const [edit, setEdit] = useState(true);
   const [dragEnd, setDragEnd] = useState(false);
+  const [activeMark, setActiveMark] = useState(0);
+  const [marks, setMarks] = useState([[]]);
+  const [buildArea, setBuildArea] = useState(marks[activeMark]);
 
+  // Update buildArea when activeMark changes
+  useEffect(() => {
+    setBuildArea(marks[activeMark]);
+  }, [activeMark]);
+
+  // Update marks when buildArea changes
+  useEffect(() => {
+    setMarks((prevMarks) => {
+      const newMarks = [...prevMarks];
+      newMarks[activeMark] = buildArea;
+      return newMarks;
+    });
+  }, [buildArea]);
+
+  // Filter out empty rows and columns when drag ends
   useEffect(() => {
     setBuildArea((prev) => {
       return prev
@@ -37,17 +55,50 @@ export default function UIGenerator({schema}) {
     );
   };
 
-  const deleteField = (rowIndex, columnIndex, fieldIndex, fieldType) => {
-    const deletedField = buildArea[rowIndex][columnIndex][fieldIndex];
-    setBuildArea((prev) => {
-      prev[rowIndex][columnIndex] = prev[rowIndex][columnIndex].filter(
-        (_, fieldID) => fieldID !== fieldIndex
-      );
-      return prev;
-    });
-    if (fieldType === "title") setTitleBlocks((prev) => [deletedField, ...prev]);
+  const deleteField = (
+    rowIndex,
+    columnIndex,
+    fieldIndex,
+    fieldType,
+    mark = activeMark
+  ) => {
+    if (customComponentsTypes.includes(fieldType)) return;
+    const deletedField = marks[mark][rowIndex][columnIndex][fieldIndex];
+    if (mark === activeMark) {
+      setBuildArea((prev) => {
+        prev[rowIndex][columnIndex] = prev[rowIndex][columnIndex].filter(
+          (_, fieldID) => fieldID !== fieldIndex
+        );
+        return [...prev];
+      });
+    }
+    if (fieldType === "title")
+      setTitleBlocks((prev) => [deletedField, ...prev]);
     else setUiBlocks((prev) => [deletedField, ...prev]);
     setDragEnd((prev) => !prev); // check if row or column is not empty to be deleted
+  };
+
+  const addMark = () => {
+    setMarks((prev) => [...prev, []]);
+    setActiveMark(marks.length); // Set the new mark as active
+  };
+
+  const deleteMark = (index) => {
+    const markToBeDeleted = marks[index];
+    markToBeDeleted.map((row, rowIndex) => {
+      console.log(row);
+      row.map((col, colIndex) => {
+        col.map((field, fieldIndex) => {
+          deleteField(rowIndex, colIndex, fieldIndex, field.type, index);
+        });
+      });
+    });
+    setMarks((prevMarks) => prevMarks.filter((_, i) => i !== index));
+    if (index === activeMark) {
+      setActiveMark(Math.max(0, index - 1));
+    } else if (index < activeMark) {
+      setActiveMark((prev) => prev - 1);
+    }
   };
 
   return (
@@ -59,7 +110,14 @@ export default function UIGenerator({schema}) {
             title="Záložky"
             even={false}
           >
-            <Marks edit={edit} />
+            <Marks
+              edit={edit}
+              marks={marks}
+              activeMark={activeMark}
+              addMark={addMark}
+              switchMark={(index) => setActiveMark(index)}
+              deleteMark={deleteMark}
+            />
           </Sidebar>
 
           <Sidebar

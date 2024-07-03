@@ -3,7 +3,7 @@ export default function LineBtn({setBuildArea}) {
     <button
       onClick={() => {
         setBuildArea((prev) => {
-          return [...prev, [[{ type: "line" }]]];
+          return [...prev, [[{ type: "line" }]]]; // type which is in customComponentsConfig.js 
         });
       }}
     >

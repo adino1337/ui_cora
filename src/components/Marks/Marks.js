@@ -1,19 +1,29 @@
+import React from "react";
 import "./Marks.css";
+import { Trash2 } from "lucide-react";
 
-export default function Marks(props) {
+export default function Marks({
+  edit,
+  marks,
+  activeMark,
+  addMark,
+  switchMark,
+  deleteMark,
+}) {
   return (
     <div className="marks">
-      <div className="markText">Formulár</div>
-      {props.edit && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "20px",
-          }}
-        >
-          <button className="addMark">+</button>
+      {marks.map((_, index) => (
+        <div className={`mark-text ${activeMark === index && "active"}`}>
+          <p className="mark-title" key={index} onClick={() => switchMark(index)}>
+            {index === 0 ? "Formulár" : `Záložka ${index}`}
+          </p>
+          {edit && index !== 0 && <Trash2 onClick={() => deleteMark(index)} />}
         </div>
+      ))}
+      {edit && (
+        <button onClick={addMark} className="add-mark">
+          +
+        </button>
       )}
     </div>
   );
