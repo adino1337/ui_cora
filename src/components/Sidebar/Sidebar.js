@@ -1,5 +1,4 @@
 import React from "react";
-import "./Sidebar.css";
 import Panel from "./Panel";
 
 export default function Sidebar({ edit, title, even, children, orientation }) {

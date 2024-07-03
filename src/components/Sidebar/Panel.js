@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Sidebar.css";
+import "./Panel.css";
 import PanelOpenClose from "./PanelOpenClose";
 
 const Panel = ({ title, even, children, orientation }) => {

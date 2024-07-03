@@ -1,0 +1,121 @@
+.side-panel-title-horizontal-open {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--secondary);
+}
+.side-panel-title-horizontal {
+  position: relative;
+  width: fit-content;
+  color: var(--secondary);
+}
+.side-panel-title-horizontal::after {
+  content: "";
+  position: absolute;
+  background-color: var(--field);
+  height: 3px;
+  width: 70%;
+  bottom: -20px;
+  left: 0;
+}
+.side-panel-title {
+  position: absolute;
+  left: 30px;
+  color: var(--secondary);
+}
+
+.side-panel::-webkit-scrollbar {
+  display: none;
+}
+.sidewaysText {
+  text-orientation: sideways;
+  writing-mode: vertical-lr;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary);
+}
+.side-panel-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: -5px;
+  z-index: -1;
+}
+
+.open-panel-icon {
+    right: 50%;
+    transform: translateX(50%);
+}
+
+.open-panel-icon,
+.close-panel-icon {
+  width: fit-content;
+  margin: 0;
+  position: absolute;
+  top: 10px;
+  cursor: pointer;
+  color: var(--field);
+}
+
+.open-panel-icon-horizontal,
+.close-panel-icon-horizontal {
+  width: fit-content;
+  margin: 0;
+  position: absolute;
+  cursor: pointer;
+  right: 30px;
+  color: var(--field);
+}
+
+.open-panel-icon-horizontal {
+  top: 50%;
+  transform: translateY(-20%);
+}
+
+.close-panel-icon-horizontal {
+  bottom: 15px;
+}
+
+.close-panel-icon {
+  right: 20px;
+}
+
+.components {
+  width: fit-content;
+  flex: 1;
+}
+
+.components button {
+  border: none;
+  outline: none;
+  padding: 20px;
+  border-radius: 5px;
+  min-width: 150px;
+  background-color: var(--field);
+  text-align: start;
+  position: relative;
+  cursor: pointer;
+  color: var(--textPrimary);
+}
+
+.components button::after {
+  content: "+";
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  background-color: var(--bgSvetlejsia);
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  color: var(--secondary);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: bold;
+}

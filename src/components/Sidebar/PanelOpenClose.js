@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, ArrowDown, ArrowLeft, ArrowUp } from "lucide-react";
-import "./Sidebar.css";
+import "./PanelOpenClose.css";
 
 const openTitle = (isHorizontal, title) => {
   return (
@@ -25,13 +25,21 @@ const arrows = (isHorizontal, isOpen) => {
   return isHorizontal ? <ArrowUp/> : <ArrowLeft/>;
 }
 
+const panelIcon = (isHorizontal, isOpen) => {
+  if (isOpen) {
+    return isHorizontal ? "open-panel-icon-horizontal" : "open-panel-icon";
+  }
+
+  return isHorizontal ? "close-panel-icon-horizontal" : "close-panel-icon";
+}
+
 const PanelOpenClose = ({ title, children, isHorizontal, setSidePanel, isOpen }) => {
   console.log(isOpen);
   return (
     <>
       {isOpen && openTitle(isHorizontal, title)}  
       <h1
-        className={isHorizontal ? "open-panel-icon-horizontal" : "open-panel-icon"}
+        className={panelIcon(isHorizontal, isOpen)}
         onClick={() => setSidePanel(isOpen)}
       >
         {arrows(isHorizontal, isOpen)}
