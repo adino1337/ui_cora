@@ -21,11 +21,11 @@ export default function BuildArea(props) {
             {...providedBase.droppableProps}
           >
             <Sidebar
-              orientation="horizontal"
-              title="Ďalšie komponenty"
-              bgColor="#e2e2e2"
-              nextBgColor="#fff"
               edit={props.edit}
+              title="Ďalšie komponenty"
+              even={false}
+              children={props.children}
+              orientation="horizontal"
             >
               <LineBtn setBuildArea={props.setBuildArea} />
             </Sidebar>

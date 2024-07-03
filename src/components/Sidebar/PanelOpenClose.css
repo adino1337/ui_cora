@@ -1,19 +1,16 @@
-.horizontal-side-panel {
+.side-panel-title-horizontal-open {
   display: flex;
-  flex-direction: column;
-  padding: 20px;
-  justify-content: space-between;
-  border-radius: 5px;
-  gap: 20px;
-  overflow: hidden;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--secondary);
 }
-
 .side-panel-title-horizontal {
   position: relative;
   width: fit-content;
   color: var(--secondary);
 }
-
 .side-panel-title-horizontal::after {
   content: "";
   position: absolute;
@@ -23,14 +20,46 @@
   bottom: -20px;
   left: 0;
 }
+.side-panel-title {
+  position: absolute;
+  left: 30px;
+  color: var(--secondary);
+}
 
-.side-panel-title-horizontal-open {
+.side-panel::-webkit-scrollbar {
+  display: none;
+}
+.sidewaysText {
+  text-orientation: sideways;
+  writing-mode: vertical-lr;
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
-  margin: 0;
   color: var(--secondary);
+}
+.side-panel-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: -5px;
+  z-index: -1;
+}
+
+.open-panel-icon {
+    right: 50%;
+    transform: translateX(50%);
+}
+
+.open-panel-icon,
+.close-panel-icon {
+  width: fit-content;
+  margin: 0;
+  position: absolute;
+  top: 10px;
+  cursor: pointer;
+  color: var(--field);
 }
 
 .open-panel-icon-horizontal,
@@ -50,64 +79,6 @@
 
 .close-panel-icon-horizontal {
   bottom: 15px;
-}
-
-.side-panel {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-}
-
-.side-panel-bg {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: -5px;
-  z-index: -1;
-}
-
-.side-panel-title {
-  position: absolute;
-  left: 30px;
-  color: var(--secondary);
-}
-
-.side-panel::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.side-panel {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.open-panel-icon,
-.close-panel-icon {
-  width: fit-content;
-  margin: 0;
-  position: absolute;
-  top: 10px;
-  cursor: pointer;
-  color: var(--field);
-}
-
-.sidewaysText {
-  text-orientation: sideways;
-  writing-mode: vertical-lr;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  color: var(--secondary);
-}
-
-.open-panel-icon {
-  right: 50%;
-  transform: translateX(50%);
 }
 
 .close-panel-icon {

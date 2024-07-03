@@ -1,0 +1,50 @@
+.horizontal-side-panel {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+    padding: 20px;
+    justify-content: space-between;
+    border-radius: 5px;
+    gap: 20px;
+    overflow: hidden;
+  }
+
+  .horizontal-collapsed {
+    min-height: 40px;
+    height: 40px;
+  }
+  
+  .horizontal-expanded {
+    min-height: 150px;
+    height: 150px;
+    width: calc(100% - 40px);
+  }
+
+  .side-panel {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+    border-right: 3px solid black;
+    cursor: pointer;
+  }
+
+  .collapsed {
+    width: 75px;
+  }
+  
+  .expanded {
+    width: 15%;
+  }
+
+  .even {
+    background-color: var(--bgSvetlejsia);
+  }
+  
+  .odd {
+    background-color: var(--bgTmavsia);
+  }
