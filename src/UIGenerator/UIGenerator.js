@@ -38,17 +38,16 @@ export default function UIGenerator({schema}) {
   };
 
   const deleteField = (rowIndex, columnIndex, fieldIndex, fieldType) => {
-    const movedField = buildArea[rowIndex][columnIndex][fieldIndex];
+    const deletedField = buildArea[rowIndex][columnIndex][fieldIndex];
     setBuildArea((prev) => {
       prev[rowIndex][columnIndex] = prev[rowIndex][columnIndex].filter(
         (_, fieldID) => fieldID !== fieldIndex
       );
-      prev[rowIndex] = prev[rowIndex].filter((arr) => arr.length !== 0);
       return prev;
     });
-    if (fieldType === "title") setTitleBlocks((prev) => [movedField, ...prev]);
-    else setUiBlocks((prev) => [movedField, ...prev]);
-    setDragEnd((prev) => !prev); // for check if row or column is not empty to be deleted
+    if (fieldType === "title") setTitleBlocks((prev) => [deletedField, ...prev]);
+    else setUiBlocks((prev) => [deletedField, ...prev]);
+    setDragEnd((prev) => !prev); // check if row or column is not empty to be deleted
   };
 
   return (
