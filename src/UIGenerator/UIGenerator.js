@@ -57,8 +57,7 @@ export default function UIGenerator({schema}) {
           <Sidebar
             edit={true}
             title="Záložky"
-            bgColor={"#e2e2e2"}
-            nextBgColor={edit ? "#fff" : "#e2e2e2"}
+            even={false}
           >
             <Marks edit={edit} />
           </Sidebar>
@@ -66,8 +65,7 @@ export default function UIGenerator({schema}) {
           <Sidebar
             edit={edit}
             title="UI bloky"
-            bgColor={"#fff"}
-            nextBgColor={"#e2e2e2"}
+            even={true}
           >
             <UiBlockPanel edit={edit} uiBlocks={uiBlocks} />
           </Sidebar>
@@ -75,8 +73,7 @@ export default function UIGenerator({schema}) {
           <Sidebar
             edit={edit}
             title="Nadpisy"
-            bgColor={"#e2e2e2"}
-            nextBgColor={"#e2e2e2"}
+            even={false}
           >
             <TitleForm setTitleBlocks={setTitleBlocks} />
             <TitlePanel
