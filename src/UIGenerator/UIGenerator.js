@@ -85,10 +85,9 @@ export default function UIGenerator({ schema }) {
 
   const deleteMark = (index) => {
     const markToBeDeleted = marks[index];
-    markToBeDeleted.map((row, rowIndex) => {
-      console.log(row);
-      row.map((col, colIndex) => {
-        col.map((field, fieldIndex) => {
+    markToBeDeleted.forEach((row, rowIndex) => {
+      row.forEach((col, colIndex) => {
+        col.forEach((field, fieldIndex) => {
           deleteField(rowIndex, colIndex, fieldIndex, field.type, index);
         });
       });

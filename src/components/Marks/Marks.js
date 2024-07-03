@@ -13,7 +13,7 @@ export default function Marks({
   return (
     <div className="marks">
       {marks.map((_, index) => (
-        <div className={`mark-text ${activeMark === index && "active"}`}>
+        <div key={index} className={`mark-text ${activeMark === index && "active"}`}>
           <p className="mark-title" key={index} onClick={() => switchMark(index)}>
             {index === 0 ? "Formulár" : `Záložka ${index}`}
           </p>

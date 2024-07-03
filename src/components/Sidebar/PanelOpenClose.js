@@ -34,7 +34,6 @@ const panelIcon = (isHorizontal, isOpen) => {
 }
 
 const PanelOpenClose = ({ title, children, isHorizontal, setSidePanel, isOpen }) => {
-  console.log(isOpen);
   return (
     <>
       {isOpen && openTitle(isHorizontal, title)}  
