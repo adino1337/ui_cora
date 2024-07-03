@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./Sidebar.css";
-import PanelOpen from "./PanelOpen";
-import PanelClose from "./PanelClose";
+import PanelOpenClose from "./PanelOpenClose";
 
 const Panel = ({ title, even, children, orientation }) => {
     const [sidePanel, setSidePanel] = useState(true);
@@ -18,9 +17,9 @@ const Panel = ({ title, even, children, orientation }) => {
           onClick={!sidePanel ? () => setSidePanel(!sidePanel) : undefined}
         >
           {sidePanel ? (
-            <PanelClose title={title} children={children} isHorizontal={isHorizontal} setSidePanel={setSidePanel}/>
+            <PanelOpenClose title={title} children={children} isHorizontal={isHorizontal} setSidePanel={setSidePanel} isOpen={!sidePanel}/>
           ) : (
-            <PanelOpen title={title} isHorizontal={isHorizontal} setSidePanel={setSidePanel} />
+            <PanelOpenClose title={title} children={children} isHorizontal={isHorizontal} setSidePanel={setSidePanel} isOpen={!sidePanel}/>
           )}
         </div>
       );
