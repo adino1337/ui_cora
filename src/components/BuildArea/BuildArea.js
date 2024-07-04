@@ -2,8 +2,8 @@ import { Droppable } from "react-beautiful-dnd";
 import Sidebar from "../Sidebar/Sidebar";
 import "./BuildArea.css";
 import Row from "./Row/Row";
-import LineBtn from "./customComponents/addButtons/LineBtn";
 import AddRowWithField from "./dropzones/AddRowWithField";
+import CustomComponents from "./customComponents/CustomComponents";
 
 export default function BuildArea(props) {
   return (
@@ -27,7 +27,7 @@ export default function BuildArea(props) {
               children={props.children}
               orientation="horizontal"
             >
-              <LineBtn setBuildArea={props.setBuildArea} />
+              <CustomComponents setBuildArea={props.setBuildArea}/>
             </Sidebar>
 
             {props.buildArea.map((row, rowIndex) => (

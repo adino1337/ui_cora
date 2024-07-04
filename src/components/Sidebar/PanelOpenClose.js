@@ -12,7 +12,7 @@ const closeTitle = (isHorizontal, title, children) => {
   return (
     <>
       <h4 className={isHorizontal ? "side-panel-title-horizontal" : "side-panel-title"}>{title}</h4>
-      {isHorizontal ? <div className="components">{children}</div> : children}
+      {children}
     </>
   );
 }
